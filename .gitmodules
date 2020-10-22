@@ -4,3 +4,6 @@
 [submodule "2bwm"]
 	path = 2bwm
 	url = https://github.com/dagnachewa/2bwm
+[submodule "st"]
+	path = st
+	url = https://gitlab.com/Matii/st.git

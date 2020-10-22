@@ -1,0 +1,25 @@
+# 
+# /etc/fstab: static file system information
+#
+# <file system>	<dir>	<type>	<options>	<dump>	<pass>
+# /dev/sda1
+UUID=ab6b82a4-73eb-4c73-b0cb-20b7a358a214	/         	ext4      	rw,relatime,data=ordered	0 1
+
+# /dev/sda2
+UUID=fc85a27f-5c4b-46db-bb24-707b9e8adf0a	/boot     	ext4      	rw,nodev,nosuid,noexec,relatime,stripe=4,data=ordered	0 2
+
+# /dev/sda4
+UUID=7c34e9b9-5506-45c9-9378-5ac673ffe66c	/data     	ext4      	rw,relatime,data=ordered	0 2
+
+# /dev/sda3
+UUID=a2d8fd97-13e5-4474-8279-c188639c3479	none      	swap      	defaults  	0 0
+
+
+#firefox /home/dagnachew/.mozilla/firefox/447hkoly.default tmpfs size=4096M,noauto,user,exec,uid=1000,gid=1000 0 0
+
+# nfs share	
+/data/downloads		/srv/nfs/goyaves-home-downloads		none	bind	0 0 
+
+/data/music		/srv/nfs/goyaves-home-music		none	bind	0 0
+
+/data/livres		/srv/nfs/goyaves-home-livres	none	bind	0 0	

@@ -1,0 +1,41 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/nvme0n1p2
+UUID=90d5f340-0e27-4135-96c3-256a2686d505	/         	xfs       	rw,relatime,attr2,inode64,noquota	0 1
+
+# /dev/nvme0n1p1
+UUID=131A-8B1F      	/boot     	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/nvme0n1p4
+UUID=0b9d3fc4-5b4f-4424-ba74-9ec92f6df372	/www      	xfs       	rw,relatime,attr2,inode64,noquota	0 2
+
+# /dev/nvme0n1p3
+UUID=0d581db4-eab5-4623-88b1-f6792c6f58b9	none      	swap      	defaults  	0 0
+
+
+
+
+# /dev/sda1
+UUID=917a45ea-b007-4a83-8b5c-b48e3400279a	/data     	xfs       	rw,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota	0 2
+
+
+# nfs mount
+
+# 192.168.0.193:/data
+192.168.0.193:/data		/mnt/goyaves-home-data		nfs4      	rw,nosuid,nodev,noatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=5,sec=sys,clientaddr=192.168.0.121,local_lock=none,addr=192.168.0.193	0 0
+
+# 192.168.0.193:/data/downloads
+192.168.0.193:/data/downloads	/mnt/goyaves-home-downloads	nfs4      	rw,nosuid,nodev,noatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=5,sec=sys,clientaddr=192.168.0.121,local_lock=none,addr=192.168.0.193	0 0
+
+# 192.168.0.193:/data/music
+192.168.0.193:/data/music	/mnt/goyaves-home-music	nfs4      	rw,nosuid,nodev,noatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=5,sec=sys,clientaddr=192.168.0.121,local_lock=none,addr=192.168.0.193	0 0
+
+# 192.168.0.193:/data/livres
+192.168.0.193:/data/livres	/mnt/goyaves-home-livres	nfs4      	rw,nosuid,nodev,noatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=5,sec=sys,clientaddr=192.168.0.121,local_lock=none,addr=192.168.0.193	0 0
+
+# zram
+/dev/zram0 none swap defaults 0 0
+#/dev/zram1 none swap defaults 0 0
+

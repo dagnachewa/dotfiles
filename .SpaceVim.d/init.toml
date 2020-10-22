@@ -1,0 +1,215 @@
+#=============================================================================
+# dark_powered.toml --- dark powered configuration example for SpaceVim
+# Copyright (c) 2016-2017 Wang Shidong & Contributors
+# Author: Wang Shidong < wsdjeg at 163.com >
+# URL: https://spacevim.org
+# License: GPLv3
+#=============================================================================
+
+# All SpaceVim option below [option] section
+[options]
+    # set spacevim theme. by default colorscheme layer is not loaded,
+    # if you want to use more colorscheme, please load the colorscheme
+    # layer
+    colorscheme = "onedark"
+    colorscheme_bg = "dark"
+    # Disable guicolors in basic mode, many terminal do not support 24bit
+    # true colors
+    enable_guicolors = true
+    # Disable statusline separator, if you want to use other value, please
+    # install nerd fonts
+    statusline_separator = "arrow"
+    statusline_inactive_separator = "arrow"
+    buffer_index_type = 4
+    enable_tabline_filetype_icon = true
+    enable_statusline_mode = true
+    # left sections of statusline
+    statusline_left_sections = [
+       'winnr',
+       'major mode',
+       'filename',
+       'fileformat',
+       'minor mode lighters',
+       'version control info',
+       'search status'
+    ]
+    # right sections of statusline
+    statusline_right_sections = [
+       'cursorpos',
+       'percentage',
+       'input method',
+       'date',
+       'time'
+    ]
+
+    autocomplete_method = "ycm"
+
+# Enable autocomplete layer
+[[layers]]
+  name = "VersionControl"
+
+[[layers]]
+name = 'autocomplete'
+auto-completion-return-key-behavior = "complete"
+auto-completion-tab-key-behavior = "smart"
+
+[[layers]]
+  name = "colorscheme"
+
+[[layers]]
+  name = "core#statusline"
+  
+[[layers]]
+  name = "cscope"
+
+[[layers]]
+name = "ctrlp"
+
+[[layers]]
+name = "ctrlspace"
+
+[[layers]]
+  name = "debug"
+
+[[layers]]
+name = "default"
+
+[[layers]]
+  name = "denite"
+
+[[layers]]
+name = "floobits"
+
+[[layers]]
+name = "fzf"
+
+[[layers]]
+  name = "git"
+
+[[layers]]
+  name = "github"
+
+[[layers]]
+  name = "lang#WebAssembly"
+
+[[layers]]
+  name = "lang#agda"
+
+[[layers]]
+  name = "lang#asciidoc"
+
+[[layers]]
+  name = "lang#assembly"
+
+[[layers]]
+  name = "lang#c"
+
+[[layers]]
+  name = "lang#clojure"
+
+[[layers]]
+  name = "lang#crystal"
+
+[[layers]]
+  name = "lang#elixir"
+
+[[layers]]
+  name = "lang#elm"
+
+[[layers]]
+  name = "lang#erlang"
+
+[[layers]]
+  name = "lang#extra"
+
+[[layers]]
+  name = "lang#go"
+
+[[layers]]
+  name = "lang#graphql"
+
+[[layers]]
+  name = "lang#haskell"
+
+[[layers]]
+  name = "lang#html"
+
+[[layers]]
+  name = "lang#hy"
+
+[[layers]]
+  name = "lang#idris"
+
+[[layers]]
+  name = "lang#io"
+
+[[layers]]
+  name = "lang#java"
+
+[[layers]]
+name = "lang#javascript"
+auto_fix = true
+enable_flow_syntax = true
+
+[[layers]]
+  name = "lang#julia"
+
+[[layers]]
+  name = "lang#nim"
+
+[[layers]]
+  name = "lang#ocaml"
+
+[[layers]]
+  name = "lang#plantuml"
+
+[[layers]]
+  name = "lang#processing"
+
+[[layers]]
+  name = "lang#python"
+
+[[layers]]
+  name = "lang#r"
+  repl_command = "R"
+
+[[layers]]
+  name = "lang#rust"
+
+[[layers]]
+  name = "lang#scala"
+
+[[layers]]
+  name = "lsp"
+
+[[layers]]
+name = 'shell'
+default_position = 'top'
+default_height = 30
+
+[[layers]]
+  name = "sudo"
+
+[[layers]]
+name = "tools#dash"
+
+[[layers]]
+  name = "tools"
+
+[[layers]]
+  name = "ui"
+
+[[layers]]
+  name = "unite"
+
+[[custom_plugins]]
+  repo = "liuchengxu/vista.vim"
+
+[[custom_plugins]]
+  repo = "iamcco/markdown-preview.nvim"
+
+[[custom_plugins]]
+  repo = "sainnhe/sonokai"
+
+
+

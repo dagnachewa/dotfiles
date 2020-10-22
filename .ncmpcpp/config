@@ -1,0 +1,136 @@
+####################################################
+## this is example configuration file, copy it to ##
+## ~/.ncmpcpp/config and set up your preferences  ##
+####################################################
+#
+##### directories ######
+##
+## Directory for storing ncmpcpp related files.
+## Changing it is useful if you want to store
+## everything somewhere else and provide command
+## line setting for alternative location to config
+## file which defines that while launching ncmpcpp.
+##
+#
+ncmpcpp_directory = "~/.ncmpcpp"
+#
+##
+## Directory for storing downloaded lyrics. It
+## defaults to ~/.lyrics since other MPD clients
+## (eg. ncmpc) also use that location.
+##
+#
+#lyrics_directory = ~/.lyrics
+#
+##### connection settings #####
+#
+mpd_host = "localhost"
+#
+mpd_port = "6600"
+#
+mpd_connection_timeout = "5"
+#
+## Needed for tag editor and file operations to work.
+##
+mpd_music_dir = "/mnt/goyaves-home-music/"
+#
+mpd_crossfade_time = "5"
+#
+##### music visualizer #####
+##
+## Note: In order to make music visualizer work you'll
+## need to use mpd fifo output, whose format parameter
+## has to be set to 44100:16:1 for mono visualization
+## or 44100:16:2 for stereo visualization. Example
+## configuration (it has to be put into mpd.conf):
+##
+ audio_output {
+        type            "fifo"
+        name            "my_fifo"
+        path            "/tmp/mpd.fifo"
+        format          "44100:16:2"
+ }
+##
+#
+visualizer_fifo_path = "/tmp/mpd.fifo"
+#
+##
+## Note: Below parameter is needed for ncmpcpp
+## to determine which output provides data for
+## visualizer and thus allow syncing between
+## visualization and sound as currently there
+## are some problems with it.
+##
+#
+visualizer_output_name = "my_fifo"
+#
+##
+## If you set format to 44100:16:2, make it 'yes'.
+##
+visualizer_in_stereo = "no"
+#
+##
+## Multiply received samples by given value. Very
+## useful for proper visualization of quiet music.
+##
+#visualizer_sample_multipler = 1
+#
+##
+## Note: Below parameter defines how often ncmpcpp
+## has to "synchronize" visualizer and audio outputs.
+## 30 seconds is optimal value, but if you experience
+## synchronization problems, set it to lower value.
+## Keep in mind that sane values start with >=10.
+##
+#
+visualizer_sync_interval = "30"
+#
+##
+## Note: To enable spectrum frequency visualization
+## you need to compile ncmpcpp with fftw3 support.
+##
+#
+## Available values: spectrum, wave.
+##
+visualizer_type = "spectrum"
+#
+visualizer_look = "▋▋"
+visualizer_color = "red"
+
+main_window_highlight_color = "white"
+#curent_item_prefix = "$(white)$r"
+#current_item_suffix = "$/r$(end)"
+
+
+progressbar_look = "▀▀ "
+progressbar_color = "black"
+progressbar_elapsed_color = "blue"
+
+cyclic_scrolling = "yes"
+
+#song_list_format = "$2{%a}|{%A}$8 $6-$8 $7%t$8"
+song_list_format = "{%a - } {%t}|{$8%f$9}$R{$3(%l)$9}"
+#song_list_format = "$1• $8%t $1by $2%a$2 $R$1%l"
+#song_list_format = "$8 %t $R$8"
+song_status_format = "{$2%t $b$4- %a}|{%f}"
+
+#now_playing_prefix = "$b$8»$2»$4»$3» "
+now_playing_prefix = "$b$2⟩$3⟩ "
+now_playing_suffix = "$/b"
+
+song_columns_list_format = "(5)[]{} (22)[red]{a} (20)[white]{t|f} (49)[blue]{b} (4)[red]{l}"
+
+color1 = "white"
+color2 = "black"
+
+mouse_support = "yes"
+header_visibility = "no"
+statusbar_visibility = "yes"
+playlist_display_mode = "classic"
+autocenter_mode = "yes"
+titles_visibility = "no"
+enable_window_title = "no"
+allow_for_physical_item_deletion = "yes"
+ask_before_clearing_playlists = "yes"
+
+

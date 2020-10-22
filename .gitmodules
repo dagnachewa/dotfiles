@@ -7,3 +7,6 @@
 [submodule "st"]
 	path = st
 	url = https://gitlab.com/Matii/st.git
+[submodule "dwm"]
+	path = dwm
+	url = https://github.com/LukeSmithxyz/dwm

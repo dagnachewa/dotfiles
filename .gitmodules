@@ -1,6 +1,6 @@
 [submodule ".zprezto"]
 	path = .zprezto
-	url = https://github.com/dagnachewa/prezto
+	url = https://github.com/sorin-ionescu/prezto
 [submodule "2bwm"]
 	path = 2bwm
 	url = https://github.com/dagnachewa/2bwm

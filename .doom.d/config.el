@@ -731,6 +731,25 @@
 
 ;;=== org-mode end
 
+;; org-roam
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "/www/org/roam")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))
+
+;; deft
+(setq deft-directory "/www/org/roam"
+                deft-extensions '("md" "org"))
+
 ;; sql
 (setq sql-connection-alist
         '((server1 (sql-product 'postgres)

@@ -147,13 +147,18 @@
        ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
 	        +babel           ; running code in org
-	        +dragndrop       ; drag & drop files/images into org buffers
+	        +brain          ; Enables org-brain integraion
+          +dragndrop       ; drag & drop files/images into org buffers
 	        +hugo            ; use Emacs for hugo blogging
+          +journal         ; Enables integration with org-journal
 	        +jupyter         ; ipython/jupyter support for babel
+          +noter
 	        +pandoc          ; export-with-pandoc support
 	        +publish         ; Emacs+Org as a static site generator
 	        +pomodoro        ; be fruitful with the tomato technique
-	        +present)        ; using org-mode for presentations
+	        +present
+          +pretty
+          +roam)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more

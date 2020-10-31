@@ -7,18 +7,18 @@ Xft.lcdfilter: lcddefault
 
 
 ! Emacs settings
-Emacs.geometry: 150x50
-Emacs.font : Fira Code 21
+Emacs.geometry: 240x120
+!Emacs.font: Fira Code 21
 
 ! URxvt settings
 
 ! General
 
 ! Fonts
-URxvt.font: xft:Fira Code Regular Nerd Font Complete:style=Regular:size=19
-URxvt.boldFont: xft:Fira Code Regular Nerd Font Complete:style=Bold:size=19
-URxvt.italicFont: xft:Fira Code Regular Nerd Font Complete :style=Italic:size=19
-URxvt.boldItalicFont: xft:Fira Code Regular Nerd Font Complete:style=Bold Italic:size=19
+URxvt.font: xft:Fira Code :style=Regular:size=19
+URxvt.boldFont: xft:Fira Code :style=Bold:size=19
+URxvt.italicFont: xft:Fira Code :style=Italic:size=19
+URxvt.boldItalicFont: xft:Fira Code :style=Bold Italic:size=19
 
 URxvt.letterSpace: 0
 urxvt.loginShell:         true
@@ -31,7 +31,7 @@ urxvt.matcher.button:  1
 !  - catch ugly URLs
 
 URxvt.lineSpace: 0
-URxvt.geometry: 92x24
+URxvt.geometry: 80x40
 URxvt.internalBorder: 24
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
@@ -39,7 +39,7 @@ URxvt.saveline: 2048
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.urgentOnBell: true
-URxvt.depth: 24
+URxvt.depth: 32
 URxvt.iso14755: false
 
 !! Common Keybinds for Navigations
@@ -87,7 +87,6 @@ URxvt.urlButton: 1
 !twobwm.enable_compton: false
 
 ! Set depth to make transparency work.
-URxvt*depth: 32
 
 #define S_base03        #002b36
 #define S_base02        #073642

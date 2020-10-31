@@ -242,6 +242,9 @@
 
 ;;=== org-mode
 
+;; org-crypt
+(setq org-crypt-key (expand-file-name "~/org-crypt-key.gpg"))
+
 ;; Agenda
 
 (setq org-agenda-files '("/www/org/gtd/" "/www/org/notes/")
@@ -731,6 +734,17 @@
 
 ;;=== org-mode end
 
+;; org-journal 
+(use-package org-journal
+      :bind
+      ("C-c n j" . org-journal-new-entry)
+      :custom
+      (org-journal-dir "/www/org/roam/")
+      (org-journal-date-prefix "#+TITLE: ")
+      (org-journal-file-format "%Y-%m-%d.org")
+      (org-journal-date-format "%A, %d %B %Y"))
+    (setq org-journal-enable-agenda-integration t)
+
 ;; org-roam
 (use-package org-roam
       :ensure t
@@ -746,9 +760,50 @@
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate))))
 
+;; org-roam-capture-ref-templates
+(after! org-roam
+      (setq org-roam-capture-ref-templates
+            '(("r" "ref" plain (function org-roam-capture--get-point)
+               "%?"
+               :file-name "websites/${slug}"
+               :head "#+TITLE: ${title}
+    #+ROAM_KEY: ${ref}
+    - source :: ${ref}"
+               :unnarrowed t))))
+
+
 ;; deft
-(setq deft-directory "/www/org/roam"
-                deft-extensions '("md" "org"))
+(use-package deft
+      :after org
+      :bind
+      ("C-c n d" . deft)
+      :custom
+      (deft-recursive t)
+      (deft-use-filter-string-for-filename t)
+      (deft-default-extension "org")
+      (deft-directory "/www/org/roam/"))
+
+;; Anki Editor
+(use-package anki-editor
+  :after org-noter
+  :config
+  ; I like making decks
+  (setq anki-editor-create-decks 't))
+
+
+;;(map! :localleader
+;;      :map org-mode-map
+;;      (:prefix ("a" . "Anki")
+;;        :desc "Push" "p" 'anki-editor-push-notes
+;;        :desc "Retry" "r" 'anki-editor-retry-failure-notes
+;;        :desc "Insert" "n" 'anki-editor-insert-note
+;;        (:prefix ("c" . "Cloze")
+;;          :desc "Dwim" "d" 'anki-editor-cloze-dwim
+;;          :desc "Region" "r" 'anki-editor-cloze-region
+;;          )
+;;        )
+;; )
+
 
 ;; sql
 (setq sql-connection-alist

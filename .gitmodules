@@ -10,3 +10,6 @@
 [submodule "dwm"]
 	path = dwm
 	url = https://github.com/LukeSmithxyz/dwm
+[submodule "prezto"]
+	path = prezto
+	url = https://github.com/dagnachewa/prezto

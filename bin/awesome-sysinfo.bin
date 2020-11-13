@@ -1,0 +1,53 @@
+#!/bin/bash
+
+colorscheme="base16-summercamp"
+name_suffixes="💀"
+namewidth=22 && [[ -z "$name_suffixes" ]] && namewidth=20
+
+term(){
+    read -r term < /proc/$PPID/comm
+    ps | sed -e "s/^ *\([0-9]*\) .*/\1/g" | \
+        while read pid
+        do ps -o ppid=$pid | \
+            while read ppid
+            do
+                read -r pname 2>/dev/null < /proc/$ppid/comm 
+                case $pname in
+                    *sh|su*|screen|login|.*init.*|systemd|python|ruby|tmux.*|launchd*|minifetch)
+                        ;;
+                    *)
+                        [[ -n $pname ]] && printf "$pname\n" && break
+                        ;;
+                esac
+                #cat /proc/$ppid/comm | sed -e "s/.sh,su*,screen,${SHELL/*\/},login,*init*,systemd,python,ruby,tmux*,launchd*//g"
+            done
+        done
+    }
+
+
+term="$(term | head -1)"
+
+song="$(mpc -f "%artist% + %title%" | head -1)"
+
+shell="$(ps ax | grep $PPID | grep -v -e "grep" | sed -e "s/.* \(.*\)/\1/g" | sed -e "s/.*\/\(.*\)/\1/g")"
+
+wm="$(xprop -root _NET_WM_NAME | \
+    sed -e 's/.*"\(.*\)".*/\1/g')"
+
+user="$(whoami) [1m$name_suffixes"
+
+printf "\n\n[33m┎━━━━━━━━━━━━━━━━━━┓                [34m┇\n"
+printf "[33m┇  [0;1m%-${namewidth}s[34m┃               ┣┻  ┇\n" "$user"
+printf "[33m┗━━━━━━━━━━━━━━━━━━━━[34m┉┉            [34m┣━━┉┛\n"
+printf "[33m╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━\n"
+printf "[33m┃ [1;31m  %-28s  [33m┇\n" "$term"
+printf "[33m┇ [1;32m  %-28s  [33m┇\n" "$shell"
+printf "[33m┃ [0;34m  [1m%-28s  [33m┃\n" "$wm"
+printf "[33m┃ [1;35m  %-28s  [33m┃\n" "$song"
+printf "[33m╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━[34m┉┉╋┓\n"
+printf "[33m┇ [31m░[42m█░[32;43m█░[33;44m█░[34;45m█░[35;46m█░[36;47m█░[0;37m█░  [36m  %-21s [34m┇\n" $colorscheme
+printf "[34m┇[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n"
+printf "[34m┗\n[0m"
+
+
+

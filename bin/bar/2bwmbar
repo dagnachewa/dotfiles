@@ -1,0 +1,239 @@
+#!/bin/bash
+#  ██                       
+# ░██                       
+# ░██       ██████   ██████ 
+# ░██████  ░░░░░░██ ░░██░░█ 
+# ░██░░░██  ███████  ░██ ░  
+# ░██  ░██ ██░░░░██  ░██    
+# ░██████ ░░████████░███    
+# ░░░░░    ░░░░░░░░ ░░░     
+# nxll <nxll@teknik.io>
+
+#RESTART
+pkill lemonbar
+
+#COLORS
+fg="#eee8d5"
+bg="#002b36"
+
+hint="#eff1f5"
+norng="#fe8019"
+borgn="d65d0e"
+nblk="#2b303b"
+bblk="#1d2021"
+nred="#cc0055"
+bred="#cc241d"
+ngrn="#225566"
+bgrn="#98971a"
+nylw="#ebcb8b"
+bylw="#d79921"
+nblu="#8fa1b3"
+bblu="#458588"
+nmag="#b48ead"
+bmag="#b16286"
+ncyn="#96b5b4"
+bcyn="#689d6a"
+nwht="#eff1f5"
+bwht="#c0c5ce"
+
+## glyphs
+glymem=""
+glycpu=""
+# glybat=""
+glypkg=""
+glyclock=""
+glycal=""
+glyint=""
+glywin=""
+glywac=""
+glyw2=""
+glyw3=""
+glyw4=""
+glyw5=""
+glyw6=""
+glyw7=""
+
+#VARS
+font="Iosevka Term:bold:size=11"
+glyph="-wuncon-siji-medium-r-normal--10-100-75-75-c-80-iso10646-1"
+height=18
+border=8
+muslength=60
+interface=wls1
+#actchar="+"
+#selchar="+"
+#actchar=""
+#selchar=""
+
+
+# Lemonpop
+notifybar_g="2560x26+0+0"
+LW=220
+LH=26
+LX=1690
+LY=45
+
+SEP1=" "
+SEP2="    "
+
+CLR="$SEP%{F-}%{B-}"
+
+# Char glyps for powerline fonts
+sep_left_corner=""
+sept_right_corner=""
+sep_left=""                        # Powerline separator left
+sep_right=""                       # Powerline separator right
+sep_l_left=""                      # Powerline light separator left
+sep_l_right=""                     # Powerline light sepatator right
+
+
+if pgrep herbstluftwm; then
+	monitor=${1:-0}
+	bh=$(( $height + ($border * 2)))
+	herbstclient pad $monitor $bh
+fi
+
+WRK(){ # Current Workspace .. 
+  ws=`xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'`
+	case ${ws} in
+		0)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+		1)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+		2)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+		3)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+		*)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+	esac
+}
+
+
+
+WIN() {
+    #echo -n "%{B$hint}%{F$bg}  %{F-}%{B-}"
+	echo -n "%{B$bg}%{F$fg} $(wname $(pfw)) %{F-}%{B-}"
+}
+
+CPU(){ # CPUs temp ..
+  cpuload=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')])
+  cpuload+="%"
+	echo -n "%{B$bg}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
+	
+}
+
+MEMORY(){
+  mem=$(free -m | awk 'NR==2 {print $3}')
+        mem+="MB"
+        #echo "%{F$BMAGENTA}  %{F-}${mem} RAM"
+	echo -n "%{B$bg}%{F$fg}  $mem RAM %{F-}%{B-}"
+}
+
+
+MUSIC(){ 
+      mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
+
+  		if [[ $mus ]]; then
+			echo -n "%{F$fg}  %{F-} $SEP2$mus"
+  		fi
+}
+
+ROOT(){
+	hdroot="$(df -h / | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B$bg}%{F$fg}  root  $hdroot free %{F-}%{B-}"
+
+}
+DATA(){
+	hdroot="$(df -h /data | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B$bg}%{F$fg}  data  $hdroot free %{F-}%{B-}"
+
+}
+WWW(){
+	hdwww="$(df -h /www | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B$bg}%{F$fg}  www  $hdwww free %{F-}%{B-}"
+
+}
+
+WINDOWTITLE(){
+	# Grabs focused window's title
+	# The echo "" at the end displays when no windows are focused.
+	title=$(xdotool getactivewindow getwindowname 2>/dev/null || echo "Hi")
+	echo -n "%{B$bg}%{F$fg} $SEP2$title" | cut -c 1-50 # Limits the output to a maximum # of chars
+}
+
+
+ VOL(){ # Volume, Sets to Headset when switched ..
+  switch=`amixer -c 0 get Master | awk '/Mono:/ {print $6}'`
+  vol=`amixer -c 0 get Master | awk '/Mono:/ {print $4}' | tr -d '[]%,'`
+  hsvol=`amixer -c 0 get PCM | awk '/Mono:/ {print $4}' | tr -d '[]%,'`
+
+
+  if [ "$switch" = "[on]" ]; then
+	#echo "%{F$BBLUE}  vol %{F-} ${vol}"
+	echo "%{B$bg} %{F$fg}  $vol %{F-}%{B-}"
+  elif [ "$switch" = "[off]" ]; then
+	echo "%{B$bg} %{F$fg}  MUTE %{F-}%{B-}"
+  else
+	#echo "%{F$BBLUE}  %{F-} ${hsvol}"
+        echo "%{B$bg} %{F$fg}   $hsvol %{F-}%{B-}"
+  fi
+}
+
+#BAT() {
+#    percent=$(cat /sys/class/power_supply/BAT0/capacity)
+#    status=$(cat /sys/class/power_supply/BAT0/status)
+
+#    if test $status = "Charging"; then
+#        symbol=""
+#        echo -n "%{B$bblk} ${symbol} %{B-}"
+#    elif test $status = "Full"; then
+#        symbol=""
+#        echo -n "%{B$bblk} ${symbol} %{B-}"
+#    else
+#        if test $percent -gt 66; then
+#            symbol=""
+#            echo -n "%{B$bblk} ${symbol} %{B-}"
+#        elif test $percent -gt 34; then
+#            symbol=""
+#            echo -n "%{B$bblk} ${symbol} %{B-}"
+#        else
+#		symbol=""
+#            echo -n "%{B$bblk} ${symbol} %{B-}"
+#        fi
+#    fi
+
+#	echo -e "%{B$nblk} $percent% %{B-}"
+#}
+
+NET() {
+	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
+	test -n "${ping}" && echo -n "%{B$bg} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+          
+	echo 
+}
+
+DATE() {
+    echo -n "%{B$bg} %{F$fg}    $(date "+%a %d.%m")%{F-} %{B-}"
+}
+
+CLOCK() {
+    echo -n "%{B$bg}%{F$fg} $(date "+%H:%M") %{F-}%{B-}"
+}
+
+BAR() {
+    #ADD ALL THE THINGS
+    while true; do
+      buf=" $(WRK)$left$(WINDOWTITLE) %{r}$(ROOT)$SEP2$(WWW)$SEP2$(DATA)$SEP2$(NET)$SEP2$(MEMORY)$SEP2$(CPU)$SEP2$(VOL)$SEP2$(DATE)$SEP1$(CLOCK)" 
+		echo "$buf"	
+        sleep 0.1
+    done | lemonbar -f "Font Awesome:regular:bold:size=11" \
+        -f "$font" \
+        -F "$fg" \
+        -B "$bg" \
+        -d \
+	-p \
+        -g $notifybar_g | sh &
+}
+
+BAR > /dev/null
+
+
+
+
+

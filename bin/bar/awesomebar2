@@ -1,0 +1,172 @@
+#!/bin/bash
+
+hc() { herbstclient "$@" ;}
+
+monitor=${1:-0}
+monitor_geometry=( $(hc monitor_rect "$monitor") )
+mon_x=${monitor_geometry[0]}
+mon_y=${monitor_geometry[1]}
+mon_w=${monitor_geometry[2]}
+mon_h=${monitor_geometry[3]}
+
+pad=$(hc attr settings.frame_gap)
+panel_h=28
+panel_x=$(expr $mon_x + $pad)
+panel_y=$(expr $mon_y + $pad)
+panel_w=$(expr $mon_w - $pad - $pad)
+panel_geometry="${panel_w}x${panel_h}+${panel_x}+${panel_y}"
+mpad=$(expr $panel_y + $panel_h)
+
+foreground="#4d4d4c"
+background="#e7e8eb"
+blue="#4271ae"
+red="#d7005f"
+cyan="#5aa7ae"
+gray="#bdc0c8"
+light_blue="#a1b6d1"
+light_red="#e495a6"
+light_cyan="#9fc8cb"
+transparent="#00000000"
+
+uniq_linebuffered() {
+    awk '$0 != l { print ; l=$0 ; fflush(); }' "$@"
+}
+
+get_tagbuff() {
+    local fg1 bg1 uc1
+    echo -ne "%{+u}"
+    for i in $(hc tag_status $monitor); do
+        if [ ${i:0:1} == '#' ]; then
+            fg1="$background"
+            bg1="$light_cyan"
+            uc1="$cyan"
+        else
+            fg1="$light_cyan"
+            bg1="$background"
+            uc1="$gray"
+        fi
+        echo -ne "%{A:herbstclient use ${i:1}:}"
+        echo -ne "%{F$fg1}%{B$bg1}%{U$uc1}"
+        echo -ne "%{O8}${i:1}%{O8}%{A}"
+    done
+    echo -ne "%{-u}"
+}
+
+get_winpane() {
+    local focusid=$(hc attr clients.focus.winid)
+    local winid=${1:-$focusid}
+    local winbuff=$(hc attr clients.$winid.class)
+    local winspc fg1 bg1 bg2 uc1 uc2
+    if [ ! -z "$winbuff" ]; then
+        [ ${#winbuff} -gt 13 ] && winbuff="${winbuff:0:10}..."
+        winspc="$(seq -s- ${#winbuff} 13 | sed -e 's/[0-9]//g' -e 's/-/ /g')"
+        winbuff="$winbuff$winspc%{O8}[$(hc attr clients.$winid.tag)]"
+        if [ "$winid" == "$focusid" ]; then
+            fg1="$background"
+            bg1="$light_cyan"
+            bg2="$background"
+            uc1="$cyan"
+            uc2="$gray"
+        else
+            fg1="$light_cyan"
+            bg1="$background"
+            bg2="$light_cyan"
+            uc1="$gray"
+            uc2="$cyan"
+        fi
+        echo -ne "%{B$transparent}%{-u}%{O4}%{+u}"
+        echo -ne "%{F$fg1}%{B$bg1}%{U$uc1}%{+u}"
+        echo -ne "%{A:herbstclient close $winid && herbstclient emit_hook window_title_changed:}%{O8}x%{O8}%{A}"
+        echo -ne "%{B$bg2}%{U$uc2}%{O4}"
+        echo -ne "%{B$bg1}%{U$uc1}"
+        echo -ne "%{A:herbstclient jumpto $winid:}%{O8}$winbuff%{O8}%{A}"
+    fi
+}
+
+get_winbuff() {
+    for winid in $($HOME/.config/herbstluftwm/dump_clients); do
+        echo -ne "$(get_winpane $winid)"
+    done
+    unset winid
+}
+
+get_datebuff() {
+    echo -ne "$(date +"%{B$background}"\
+"%{F$light_cyan}%{O12}%a "\
+"%{F$cyan}%b %-d, "\
+"%{F$red}%-l:%M "\
+"%{F$light_red}%p%{O12}%{B-}")"
+}
+
+get_menubuff() {
+    echo -ne "%{A:$HOME/.local/bin/power_menu:}"
+    echo -ne "%{U$red}%{+u}%{F$background}%{B$light_red}"
+    echo -ne "%{O12}%{T2}\ue00d%{T-}%{O12}%{A}"
+}
+
+get_wifibuff() {
+    [ $(nmcli -t g | awk -F: '{print $1}') == connected ] && \
+        icon=$(printf "\ue21a") || \
+        icon=$(printf "\ue217")
+    echo -ne "%{A:$HOME/.local/bin/wifi_menu:}"
+    echo -ne "%{F$background}%{B$light_cyan}%{U$cyan}%{+u}"
+    echo -ne "%{O12}%{T2}$icon%{T-}%{O12}%{A}"
+    unset icon
+}
+
+hc pad $monitor $mpad
+killall -q lemonbar
+killall -q herbstclient
+
+{
+    while true; do
+        echo -e "datetime\t$(get_datebuff)"
+        echo -e "wifistatus\t$(get_wifibuff)"
+        sleep 1 || break
+    done > >(uniq_linebuffered) &
+    childpid=$!
+    hc --idle
+    kill $childpid
+
+} 2> /dev/null | {
+    winbuff=""
+    tagbuff="$(get_tagbuff)"
+    datebuff="$(get_datebuff)"
+    wifibuff="$(get_wifibuff)"
+    powermenu="$(get_menubuff)"
+
+    while true; do
+        buff="%{l}$tagbuff$winbuff"
+        buff+="%{r}%{B$background}%{U$gray}%{+u}$datebuff$wifibuff$powermenu%{F-}%{B-}%{A}%{-u}"
+        echo -e "$buff"
+
+        IFS=$'\t' read -ra cmd || break
+        case "${cmd[0]}" in
+            tag*)
+                tagbuff="$(get_tagbuff)"
+                ;;
+            focus_changed|window_title_changed)
+                winbuff="$(get_winbuff)"
+                ;;
+            datetime)
+                datebuff="${cmd[@]:1}"
+                ;;
+            wifistatus)
+                wifibuff="${cmd[@]:1}"
+                ;;
+            quit|reload)
+                killall -q lemonbar
+                killall -q herbstclient
+                exit
+                ;;
+        esac
+    done
+
+} 2> /dev/null | {
+    lemonbar -g "$panel_geometry" -d -a 26 -u 4 \
+             -o  0 -f "ProggyCleanTT:size=12" \
+             -o -2 -f "-wuncon-siji-medium-r-normal--10-100-75-75-c-80-iso10646-1" \
+             -o -1 -f "DejaVu Sans Mono:size=8" \
+             -B "$transparent"
+
+} 2> /dev/null | sh

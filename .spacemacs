@@ -138,7 +138,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(ewal-doom-themes,org-pandoc-import,org-mind-map,org-roam)
+   dotspacemacs-additional-packages '(ewal-doom-themes,org-pandoc-import,org-mind-map,(org-roam :location (recipe :fetcher github :repo "jethrokuan/org-roam")))
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -1259,7 +1259,7 @@ before packages are loaded."
       :hook
       (after-init . org-roam-mode)
       :custom
-      (org-roam-directory "/data/www/org.git")
+      (org-roam-directory "/data/www/org.git/")
       :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)

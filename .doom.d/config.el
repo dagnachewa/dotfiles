@@ -47,6 +47,30 @@
   (setq gnutls-verify-error t)
   (setq gnutls-trustfiles (list trustfile)))
 
+;; Define Constants
+(defconst *sys/linux*
+  (eq system-type 'gnu/linux)
+  "Are we running on a GNU/Linux system?")
+
+(defconst python-p
+  (or (executable-find "python3")
+      (and (executable-find "python")
+           (> (length (shell-command-to-string "python --version | grep 'Python 3'")) 0)))
+  "Do we have python3?") 
+  
+(defconst pip-p
+  (or (executable-find "pip3")
+      (and (executable-find "pip")
+           (> (length (shell-command-to-string "pip --version | grep 'python 3'")) 0)))
+  "Do we have pip3?")
+ 
+
+(defconst eaf-env-p
+  (and *sys/linux* (display-graphic-p) python-p pip-p
+       (not (equal (shell-command-to-string "pip freeze | grep '^PyQt\\|PyQtWebEngine'") "")))
+  "Do we have EAF environment setup?")
+
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Dagnachew Argaw"
@@ -697,6 +721,22 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
                                          (org-super-agenda-groups
                                           '((:auto-ts t))))))))))
 
+
+;; Beancount
+(use-package! beancount
+  :defer t
+  :bind
+  ("C-M-b" . (lambda ()
+               (interactive)
+               (find-file "~/Dropbox/beancount/main.bean")))
+  :mode
+  ("\\.bean\\(?:count\\)?\\'" . beancount-mode)
+  :config
+  (setq beancount-accounts-files
+        (directory-files "~/Dropbox/beancount/accounts/"
+                         'full
+                         (rx ".bean" eos))))
+
 ;; Org-mind-map
 (load "~/.emacs.d/site-lisp/org-mind-map.el")
 
@@ -706,6 +746,43 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   :config
   ; I like making decks
   (setq anki-editor-create-decks 't))
+
+;; EAF  
+
+(use-package eaf
+  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+  :if eaf-env-p
+  :custom
+  (eaf-find-alternate-file-in-dired t)
+  (browse-url-browser-function 'eaf-open-browser) ;; Make EAF Browser my default browser
+  (eaf-browser-continue-where-left-off t)
+  :config
+  (require 'eaf-org)
+  (defalias 'browse-web #'eaf-open-browser)
+  (eaf-setq eaf-browser-default-zoom "1.25")
+  (eaf-setq eaf-browser-dark-mode "false")
+  (eaf-setq eaf-browser-enable-adblocker "true")
+  (eaf-setq eaf-pdf-dark-mode "false")
+  (eaf-setq eaf-browser-enable-autofill "true")
+  ;; I already bind "RET", "<mouse-2>", "^" to `dired-find-alternate-file' in `init-dired.el'.
+  ;; Comment this line out of you don't want to use EAF to open available files in dired.
+  ;; (global-set-key [remap dired-find-alternate-file] #'eaf-file-open-in-dired)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)
+  (eaf-bind-key open_link "C-M-s" eaf-browser-keybinding)
+  (eaf-bind-key clear_cookies "C-M-q" eaf-browser-keybinding)
+  (eaf-bind-key insert_or_recover_prev_close_page "X" eaf-browser-keybinding)
+  (eaf-bind-key scroll_up "RET" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down_page "DEL" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down_page "u" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_up_page "d" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_to_end "M->" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_to_begin "M-<" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key quit-window "q" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key zoom_in "C-=" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key zoom_out "C--" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  (eaf-bind-key eaf-send-key-sequence "M-]" eaf-terminal-keybinding)
+  )
 
 ;; sql
 (setq sql-connection-alist

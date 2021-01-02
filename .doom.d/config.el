@@ -202,7 +202,7 @@
    user-mail-address "dagnachewa@gmail.com"
    user-full-name "dagnachew argaw"
    smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
-   smtpmail-auth-credentials (expand-file-name "~/gmail.pass.gpg")
+   smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
    smtpmail-default-smtp-server "smtp.gmail.com"
    smtpmail-smtp-server "smtp.gmail.com"
    smtpmail-smtp-service 587
@@ -784,7 +784,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   (eaf-bind-key eaf-send-key-sequence "M-]" eaf-terminal-keybinding)
   )
 
-;; sql
+;; Sql
 (setq sql-connection-alist
         '((server1 (sql-product 'postgres)
                    (sql-port 5432)
@@ -808,14 +808,15 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   (add-hook 'sql-interactive-mode-hook
             (lambda ()
               (toggle-truncate-lines t)))
-;; plantuml
+
+;; Plantuml
 (setq org-plantuml-jar-path (expand-file-name "/home/perrierjouet/plantuml.jar"))
 
-;; ocaml
+;; Ocaml
 (add-to-list 'load-path "/www/perrierjouet/.opam/default/share/emacs/site-lisp")
 (require 'ocp-indent)
 
-;; rmsbolt
+;; Rmsbolt
 (setq rmsbolt-disassemble t)
 
 ;; +bindings disabeled so I need actions for buttons on the dashboard
@@ -825,7 +826,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
       "C-x C-p" #'projectile-switch-project
       "C-x C-L" #'doom/quickload-session)
 
-;; ispell
+;; Ispell
 (setq ispell-program-name (executable-find "hunspell")
       ispell-dictionary "en_US")
 

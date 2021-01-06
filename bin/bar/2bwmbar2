@@ -10,7 +10,7 @@
 # nxll <nxll@teknik.io>
 
 #RESTART
-pkill lemonbar
+#pkill lemonbar
 
 #COLORS
 fg="#B8B9B4"
@@ -35,7 +35,10 @@ nwht="#AAABA6"
 bwht="#AFB0AB"
 
 #VARS
-font="-kakwa-kakwafont-medium-r-normal--12-120-72-72-c-60-iso8859-1"
+font="-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*"
+#font="-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1"
+#font="-*-envy code r-medium-r-*-*-16-*-*-*-*-*-*-*"
+#font="-kakwa-kakwafont-medium-r-normal--12-120-72-72-c-60-iso8859-1"
 glyph="-wuncon-siji-medium-r-normal--10-100-75-75-c-80-iso10646-1"
 height=18
 border=8
@@ -45,6 +48,9 @@ interface=wls1
 #selchar="+"
 #actchar=""
 #selchar=""
+
+sep_left_corner=""
+sept_right_corner=""
 
 if pgrep herbstluftwm; then
 	monitor=${1:-0}
@@ -103,28 +109,6 @@ WIN() {
 	echo -n "%{B$bblk}%{F$fg} $(wname $(pfw)) %{F-}%{B-}"
 }
 
-MUSIC() {
-	playing=$(mpc status | sed -n 2p | cut -c1-9)
-	
-		if [ "${playing}" = "[playing]" ]; then
-        	symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
-		elif [ ${playing} = "[paused]" ]; then
-			symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
-		elif [ ! "${playing}" = "[playing]" ]; then
-			symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} ··· %{B-}"
-		fi
-
-    echo -n "${symbol}${song}"
-}
-
-VOL() {
-	getvol=$(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1  )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')
-	
-	echo -n "%{B$bblk}  %{B$nblk} $getvol% %{B-}"
-}
 
 BAT() {
     percent=$(cat /sys/class/power_supply/BAT0/capacity)
@@ -152,34 +136,55 @@ BAT() {
 	echo -e "%{B$nblk} $percent% %{B-}"
 }
 
-NET() {
-	#symbol="%{B$bblk}  %{B-}"
-	#disconnected=$(iw $interface link | awk '/Not/ {print $1}')
 
-	#ssid=$(
-	#if [ "$disconnected" = "Not" ]; then
-	#	echo "NOT CONNECTED"
-	#else
-	#	iw $interface link | grep 'SSID' | sed 's/SSID: //' | sed 's/\t//'
-	#fi)
+BAT1() {
+    percent=$(cat /sys/class/power_supply/BAT1/capacity)
+    status=$(cat /sys/class/power_supply/BAT1/status)
 
-	#echo -n "${symbol}%{B$nblk} ${ssid} %{B-}"
-	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
-	test -n "${ping}" && echo -n "%{B$bg} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+    if test $status = "Charging"; then
+        symbol=""
+        echo -n "%{B$bblk} ${symbol} %{B-}"
+    elif test $status = "Full"; then
+        symbol=""
+        echo -n "%{B$bblk} ${symbol} %{B-}"
+    else
+        if test $percent -gt 66; then
+            symbol=""
+            echo -n "%{B$bblk} ${symbol} %{B-}"
+        elif test $percent -gt 34; then
+            symbol=""
+            echo -n "%{B$bblk} ${symbol} %{B-}"
+        else
+		        symbol=""
+            echo -n "%{B$bblk} ${symbol} %{B-}"
+        fi
+    fi
+
+	  echo -e "%{B$nblk} $percent% %{B-}"
 }
 
+# NET() {
+# 	symbol="%{B$bblk}  %{B-}"
+# 	disconnected=$(iw $interface link | awk '/Not/ {print $1}')
+
+# 	ssid=$(
+# 	if [ "$disconnected" = "Not" ]; then
+# 		echo "NOT CONNECTED"
+# 	else
+# 		iw $interface link | grep 'SSID' | sed 's/SSID: //' | sed 's/\t//'
+# 	fi)
+# 	echo -n "${symbol}%{B$nblk} ${ssid} %{B-}"
+# }
 DATE() {
     echo -n "%{B$bblk} %{F$fg}$(date "+%d/%m")%{F-} %{B-}"
 }
-
 CLOCK() {
     echo -n "%{B$hint}%{F$bg} $(date "+%H:%M") %{F-}%{B-}"
 }
-
 BAR() {
     #ADD ALL THE THINGS
     while true; do
-		buf="$(WRK) $(MUSIC)%{c}%{r}$(VOL) $(NET) $(DATE) $(CLOCK)" 
+		    buf="$(WRK) %{c}%{r} $sep_left_corner$(DATE) $(CLOCK)" 
 		echo "$buf"	
         sleep 0.1
     done | lemonbar -f $glyph \
@@ -187,10 +192,11 @@ BAR() {
         -F "$fg" \
         -B "$bg" \
         -u "$border" \
-		-r "$border" \
-		-R "$bg" \
+        -u "$border" \
+		# -r "$border" \
+		# -R "$bg" \
         -g "1264x$height+0+0" | sh &
-}
 
+}
 BAR > /dev/null
 

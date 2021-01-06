@@ -13,8 +13,10 @@
 pkill lemonbar
 
 #COLORS
-fg="#eee8d5"
-bg="#002b36"
+fg="#24002c"
+bg="#24002c"
+fg2="#f98560"
+bg2="#24002c"
 
 hint="#eff1f5"
 norng="#fe8019"
@@ -85,6 +87,10 @@ sep_left=""                        # Powerline separator left
 sep_right=""                       # Powerline separator right
 sep_l_left=""                      # Powerline light separator left
 sep_l_right=""                     # Powerline light sepatator right
+rightArrow="%{F$WHITE}\ue0b0%{F-}"
+leftArrow="%{F$fg}  %{F-}"
+SEP_RIGHT="%{F$fg}  %{F-}"
+
 
 
 if pgrep herbstluftwm; then
@@ -96,11 +102,11 @@ fi
 WRK(){ # Current Workspace .. 
   ws=`xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'`
 	case ${ws} in
-		0)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
-		1)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
-		2)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
-		3)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
-		*)echo -n "%{B$bg}%{F$fg}   %{F-}%{B-}";;
+		0)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		1)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		2)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		3)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		*)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
 	esac
 }
 
@@ -114,7 +120,7 @@ WIN() {
 CPU(){ # CPUs temp ..
   cpuload=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')])
   cpuload+="%"
-	echo -n "%{B$bg}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
+	echo -n "%{B#cb7bda}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
 	
 }
 
@@ -122,7 +128,7 @@ MEMORY(){
   mem=$(free -m | awk 'NR==2 {print $3}')
         mem+="MB"
         #echo "%{F$BMAGENTA}  %{F-}${mem} RAM"
-	echo -n "%{B$bg}%{F$fg}  $mem RAM %{F-}%{B-}"
+	echo -n "%{B#fc595e}%{F$fg}  $mem RAM %{F-}%{B-}"
 }
 
 
@@ -136,17 +142,17 @@ MUSIC(){
 
 ROOT(){
 	hdroot="$(df -h / | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B$bg}%{F$fg}  root  $hdroot free %{F-}%{B-}"
+	echo -n "%{B#abb7c5}%{F$fg}  root  $hdroot free %{F-}%{B-}"
 
 }
 DATA(){
 	hdroot="$(df -h /data | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B$bg}%{F$fg}  data  $hdroot free %{F-}%{B-}"
+	echo -n "%{B#f68e83}%{F$fg}  data  $hdroot free %{F-}%{B-}"
 
 }
 WWW(){
 	hdwww="$(df -h /www | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B$bg}%{F$fg}  www  $hdwww free %{F-}%{B-}"
+	echo -n "%{B#9e5c99}%{F$fg}  www  $hdwww free %{F-}%{B-}"
 
 }
 
@@ -203,23 +209,23 @@ WINDOWTITLE(){
 
 NET() {
 	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
-	test -n "${ping}" && echo -n "%{B$bg} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+	test -n "${ping}" && echo -n "%{B#678891} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
           
 	echo 
 }
 
 DATE() {
-    echo -n "%{B$bg} %{F$fg}    $(date "+%a %d.%m")%{F-} %{B-}"
+    echo -n "%{B#edb9bd} %{F$fg}   $(date "+%a %d.%m")%{F-} %{B-}"
 }
 
 CLOCK() {
-    echo -n "%{B$bg}%{F$fg} $(date "+%H:%M") %{F-}%{B-}"
+    echo -n "%{F$fg}%{B#f98560} $(date "+%H:%M") %{F-}%{B-}"
 }
 
 BAR() {
     #ADD ALL THE THINGS
     while true; do
-      buf=" $(WRK)$left$(WINDOWTITLE) %{r}$(ROOT)$SEP2$(WWW)$SEP2$(DATA)$SEP2$(NET)$SEP2$(MEMORY)$SEP2$(CPU)$SEP2$(VOL)$SEP2$(DATE)$SEP1$(CLOCK)" 
+      buf=" $(WRK)$(WINDOWTITLE) %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
 		echo "$buf"	
         sleep 0.1
     done | lemonbar -f "Font Awesome:regular:bold:size=11" \
@@ -232,6 +238,12 @@ BAR() {
 }
 
 BAR > /dev/null
+
+
+
+
+
+
 
 
 

@@ -104,20 +104,13 @@ WIN() {
 }
 
 MUSIC() {
-	playing=$(mpc status | sed -n 2p | cut -c1-9)
+	mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
 	
-		if [ "${playing}" = "[playing]" ]; then
-        	symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
-		elif [ ${playing} = "[paused]" ]; then
-			symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
-		elif [ ! "${playing}" = "[playing]" ]; then
-			symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
-			song="%{B$nblk} ··· %{B-}"
-		fi
+		if [[ $mus ]]; then
+			symbol="%{B$bblk} %{F$fg}%{F-} %{B-}"
+			echo -n "${symbol}${song}"
+  		fi
 
-    echo -n "${symbol}${song}"
 }
 
 VOL() {
@@ -153,19 +146,11 @@ BAT() {
 }
 
 NET() {
-	#symbol="%{B$bblk}  %{B-}"
-	#disconnected=$(iw $interface link | awk '/Not/ {print $1}')
-
-	#ssid=$(
-	#if [ "$disconnected" = "Not" ]; then
-	#	echo "NOT CONNECTED"
-	#else
-	#	iw $interface link | grep 'SSID' | sed 's/SSID: //' | sed 's/\t//'
-	#fi)
-
-	#echo -n "${symbol}%{B$nblk} ${ssid} %{B-}"
+	symbol="%{B$bblk}  %{B-}"
 	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
-	test -n "${ping}" && echo -n "%{B$bg} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+	#test -n "${ping}" && echo -n "%{B$fg} %{F$bg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+	test -n "${ping}" && echo -n "${symbol}%{B$nblk} %{B-}" || echo "NOT CONNECTED"
+
 }
 
 DATE() {

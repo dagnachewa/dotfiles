@@ -133,12 +133,20 @@ MEMORY(){
 
 
 MUSIC(){ 
-      mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
+	STATUS="$(mpc status | sed '2q;d' | awk '{ print $1 }')"	
+	#mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
 
-  		if [[ $mus ]]; then
-			echo -n "%{F$fg}  %{F-} $SEP2$mus"
-  		fi
+  		#if [[ $mus ]]; then
+			#echo -n "%{F$fg}  %{F-} $SEP2$mus"
+  		#fi
+  	if [[ "$STATUS" == "[playing]" ]]; then
+  		echo " $(mpc current | trunc 45)"
+	fi
+
 }
+
+
+
 
 ROOT(){
 	hdroot="$(df -h / | tail -n 1 | awk '{print $4}')"

@@ -119,21 +119,29 @@ MEMORY(){
 }
 
 
+MUSIC2(){ 
+      	mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
+
+  		if [[ $mus ]]; then
+			echo -n "%{F$fg2}   $(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )   %{F-}"
+  		fi
+}
+
 MUSIC() {
 	playing=$(mpc status | sed -n 2p | cut -c1-9)
 	
 		if [ "${playing}" = "[playing]" ]; then
-        	symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
-			song="%{B$bg} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+        	symbol="%{B$bblk} %{F$fg2}%{F-} %{B-}"
+			song="%{B$bg2} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
 		elif [ ${playing} = "[paused]" ]; then
-			symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
-			song="%{B$bg} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+			symbol="%{B$bg2} %{F$fg2}%{F-} %{B-}"
+			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
 		elif [ ! "${playing}" = "[playing]" ]; then
-			symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
-			song="%{B$bg} ··· %{B-}"
+			symbol="%{B$bg2} %{F$fg2}%{F-} %{B-}"
+			song="%{B$bg2 ··· %{B-}"
 		fi
 
-    		echo -n "${symbol}${song}"
+    echo -n "${song}"
 }
 
 VOL() {
@@ -216,7 +224,7 @@ CLOCK() {
 BAR() {
     #ADD ALL THE THINGS
     while true; do
-      buf=" $(WRK)$(WINDOWTITLE) %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
+      buf=" $(WRK)$(WINDOWTITLE) %{c} $(MUSIC2)  %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
 		echo "$buf"	
         sleep 0.1
     done | lemonbar -f "Font Awesome:regular:bold:size=11" \

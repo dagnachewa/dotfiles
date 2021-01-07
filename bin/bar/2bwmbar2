@@ -10,11 +10,13 @@
 # nxll <nxll@teknik.io>
 
 #RESTART
-#pkill lemonbar
+pkill lemonbar
 
 #COLORS
-fg="#B8B9B4"
-bg="#21211F"
+fg="#24002c"
+bg="#24002c"
+fg2="#f98560"
+bg2="#24002c"
 
 hint="#5E5E5C"
 nblk="#292927"
@@ -34,11 +36,48 @@ bcyn="#696966"
 nwht="#AAABA6"
 bwht="#AFB0AB"
 
+# Lemonpop
+notifybar_g="2560x26+0+0"
+LW=220
+LH=26
+LX=1690
+LY=45
+
+SEP1=" "
+SEP2="  "
+
+CLR="$SEP%{F-}%{B-}"
+
+# Char glyps for powerline fonts
+sep_left_corner=""
+sept_right_corner=""
+sep_left=""                        # Powerline separator left
+sep_right=""                       # Powerline separator right
+sep_l_left=""                      # Powerline light separator left
+sep_l_right=""                     # Powerline light sepatator right
+rightArrow="%{F$fg}\ue0b0%{F-}"
+leftArrow="%{F$fg}  %{F-}"
+SEP_LEFT="%{F$fg2}%{F-}"
+
+## glyphs
+glymem=""
+glycpu=""
+# glybat=""
+glypkg=""
+glyclock=""
+glycal=""
+glyint=""
+glywin=""
+glywac=""
+glyw2=""
+glyw3=""
+glyw4=""
+glyw5=""
+glyw6=""
+glyw7=""
+
 #VARS
-font="-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*"
-#font="-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1"
-#font="-*-envy code r-medium-r-*-*-16-*-*-*-*-*-*-*"
-#font="-kakwa-kakwafont-medium-r-normal--12-120-72-72-c-60-iso8859-1"
+font="-kakwa-kakwafont-medium-r-normal--12-120-72-72-c-60-iso8859-1"
 glyph="-wuncon-siji-medium-r-normal--10-100-75-75-c-80-iso10646-1"
 height=18
 border=8
@@ -49,66 +88,59 @@ interface=wls1
 #actchar=""
 #selchar=""
 
-sep_left_corner=""
-sept_right_corner=""
-
 if pgrep herbstluftwm; then
 	monitor=${1:-0}
 	bh=$(( $height + ($border * 2)))
 	herbstclient pad $monitor $bh
 fi
 
-WRKL() {
-	wrkspce=$(xprop -root _NET_CURRENT_DESKTOP | sed -e 's/_NET_CURRENT_DESKTOP(CARDINAL) = //')
-	
-	if [ "${wrkspce}" = "0" ] ;
-	then 
-		echo "%{B$hint} %{F$bg}000%{F-} %{B$nblk} 001 010 011 100 %{B-}"
-	elif [ "${wrkspce}" = "1" ] ;
-	then
-		echo "%{B$nblk} 000 %{B$hint} %{F$bg}001%{F-} %{B$nblk} 010 011 100 %{B-}"
-	elif [ "${wrkspce}" = "2" ] ;
-	then 
-		echo "%{B$nblk} 000 001 %{B$hint} %{F$bg}010%{F-} %{B$nblk} 011 100 %{B-}"
-	elif [ "${wrkspce}" = "3" ] ;
-	then 
-		echo "%{B$nblk} 000 001 010 %{B$hint} %{F$bg}011%{F-} %{B$nblk} 100 %{B-}"
-	elif [ "${wrkspce}" = "4" ] ;
-	then 
-		echo "%{B$nblk} 000 001 010 011 %{B$hint} %{F$bg}100%{F-} %{B-}"
-    else
-		echo "%{B$hint} %{F$bg}NONE%{F-} %{B-}"
-	fi
+WRK(){ # Current Workspace .. 
+  ws=`xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'`
+	case ${ws} in
+		0)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		1)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		2)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		3)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		*)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+	esac
 }
 
-WRK() {
-	wrkspce=$(xprop -root _NET_CURRENT_DESKTOP | sed -e 's/_NET_CURRENT_DESKTOP(CARDINAL) = //')
-	
-	if [ "${wrkspce}" = "0" ] ;
-	then 
-		echo "%{B$hint} %{F$bg}0:0%{F-} %{B-}"
-	elif [ "${wrkspce}" = "1" ] ;
-	then
-		echo "%{B$hint} %{F$bg}0:1%{F-} %{B-}"
-	elif [ "${wrkspce}" = "2" ] ;
-	then 
-		echo "%{B$hint} %{F$bg}0:2%{F-} %{B-}"
-	elif [ "${wrkspce}" = "3" ] ;
-	then 
-		echo "%{B$hint} %{F$bg}0:3%{F-} %{B-}"
-	elif [ "${wrkspce}" = "4" ] ;
-	then 
-		echo "%{B$hint} %{F$bg}0:4%{F-} %{B-}"
-    else
-		echo "%{B$hint} %{F$bg}NONE%{F-} %{B-}"
-	fi
-}
 
 WIN() {
     #echo -n "%{B$hint}%{F$bg}  %{F-}%{B-}"
-	echo -n "%{B$bblk}%{F$fg} $(wname $(pfw)) %{F-}%{B-}"
+	echo -n "%{B$bg}%{F$fg} $(wname $(pfw)) %{F-}%{B-}"
 }
 
+MEMORY(){
+  mem=$(free -m | awk 'NR==2 {print $3}')
+        mem+="MB"
+        #echo "%{F$BMAGENTA}  %{F-}${mem} RAM"
+	echo -n "%{B#fc595e}%{F$fg}  $mem RAM %{F-}%{B-}"
+}
+
+
+MUSIC() {
+	playing=$(mpc status | sed -n 2p | cut -c1-9)
+	
+		if [ "${playing}" = "[playing]" ]; then
+        	symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
+			song="%{B$bg} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+		elif [ ${playing} = "[paused]" ]; then
+			symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
+			song="%{B$bg} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+		elif [ ! "${playing}" = "[playing]" ]; then
+			symbol="%{B$bg} %{F$fg}%{F-} %{B-}"
+			song="%{B$bg} ··· %{B-}"
+		fi
+
+    		echo -n "${symbol}${song}"
+}
+
+VOL() {
+	getvol=$(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1  )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')
+	
+	echo -n "%{B$bblk}  %{B$nblk} $getvol% %{B-}"
+}
 
 BAT() {
     percent=$(cat /sys/class/power_supply/BAT0/capacity)
@@ -136,67 +168,67 @@ BAT() {
 	echo -e "%{B$nblk} $percent% %{B-}"
 }
 
+ROOT(){
+	hdroot="$(df -h / | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B#abb7c5}%{F$fg}  root  $hdroot free %{F-}%{B-}"
 
-BAT1() {
-    percent=$(cat /sys/class/power_supply/BAT1/capacity)
-    status=$(cat /sys/class/power_supply/BAT1/status)
+}
+DATA(){
+	hdroot="$(df -h /data | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B#f68e83}%{F$fg}  data  $hdroot free %{F-}%{B-}"
 
-    if test $status = "Charging"; then
-        symbol=""
-        echo -n "%{B$bblk} ${symbol} %{B-}"
-    elif test $status = "Full"; then
-        symbol=""
-        echo -n "%{B$bblk} ${symbol} %{B-}"
-    else
-        if test $percent -gt 66; then
-            symbol=""
-            echo -n "%{B$bblk} ${symbol} %{B-}"
-        elif test $percent -gt 34; then
-            symbol=""
-            echo -n "%{B$bblk} ${symbol} %{B-}"
-        else
-		        symbol=""
-            echo -n "%{B$bblk} ${symbol} %{B-}"
-        fi
-    fi
+}
+WWW(){
+	hdwww="$(df -h /www | tail -n 1 | awk '{print $4}')"
+	echo -n "%{B#9e5c99}%{F$fg}  www  $hdwww free %{F-}%{B-}"
 
-	  echo -e "%{B$nblk} $percent% %{B-}"
 }
 
-# NET() {
-# 	symbol="%{B$bblk}  %{B-}"
-# 	disconnected=$(iw $interface link | awk '/Not/ {print $1}')
+CPU(){ # CPUs temp ..
+  cpuload=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')])
+  cpuload+="%"
+	echo -n "%{B#cb7bda}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
+	
+}
 
-# 	ssid=$(
-# 	if [ "$disconnected" = "Not" ]; then
-# 		echo "NOT CONNECTED"
-# 	else
-# 		iw $interface link | grep 'SSID' | sed 's/SSID: //' | sed 's/\t//'
-# 	fi)
-# 	echo -n "${symbol}%{B$nblk} ${ssid} %{B-}"
-# }
+WINDOWTITLE(){
+	# Grabs focused window's title
+	# The echo "" at the end displays when no windows are focused.
+	title=$(xdotool getactivewindow getwindowname 2>/dev/null || echo "Hi")
+	echo -n "%{B$bg}%{F$fg} $SEP2$title" | cut -c 1-50 # Limits the output to a maximum # of chars
+}
+
+NET() {
+	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
+	test -n "${ping}" && echo -n "%{B#678891} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+          
+	echo 
+}
+
 DATE() {
-    echo -n "%{B$bblk} %{F$fg}$(date "+%d/%m")%{F-} %{B-}"
+    echo -n "%{B#edb9bd} %{F$fg}   $(date "+%a %d.%m")%{F-} %{B-}"
 }
+
 CLOCK() {
-    echo -n "%{B$hint}%{F$bg} $(date "+%H:%M") %{F-}%{B-}"
+    echo -n "%{F$fg}%{B#f98560} $(date "+%H:%M") %{F-}%{B-}"
 }
+
 BAR() {
     #ADD ALL THE THINGS
     while true; do
-		    buf="$(WRK) %{c}%{r} $sep_left_corner$(DATE) $(CLOCK)" 
+      buf=" $(WRK)$(WINDOWTITLE) %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
 		echo "$buf"	
         sleep 0.1
-    done | lemonbar -f $glyph \
+    done | lemonbar -f "Font Awesome:regular:bold:size=11" \
         -f "$font" \
         -F "$fg" \
         -B "$bg" \
-        -u "$border" \
-        -u "$border" \
-		# -r "$border" \
-		# -R "$bg" \
-        -g "1264x$height+0+0" | sh &
-
+        -d \
+	-p \
+        -g $notifybar_g | sh &
 }
+
 BAR > /dev/null
+
+
 

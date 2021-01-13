@@ -200,3 +200,4 @@
        :config
        ;;literate
        (default +smartparens))
+

@@ -73,7 +73,7 @@
        :emacs
        (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;;ibuffer         ; interactive buffer management
+       ibuffer         ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
@@ -146,25 +146,24 @@
        ;;lean
        ;;factor
        ledger            ; an accounting system in Emacs
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
-	        +babel           ; running code in org
-	        +brain          ; Enables org-brain integraion
-          +dragndrop       ; drag & drop files/images into org buffers
-	        +hugo            ; use Emacs for hugo blogging
-          +journal         ; Enables integration with org-journal
-	        +jupyter         ; ipython/jupyter support for babel
-          +noter
-	        +pandoc          ; export-with-pandoc support
-	        +publish         ; Emacs+Org as a static site generator
-	        +pomodoro        ; be fruitful with the tomato technique
-	        +present
-          +pretty
-          +roam)        ; using org-mode for presentations
+        +brain
+        +dragndrop
+        +gnuplot
+        +hugo
+        +journal
+        +jupyter
+        +noter
+        +pandoc
+        +pomodoro
+        +present
+        +pretty
+        +roam)        ; using org-mode for presentations
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        purescript        ; javascript, but functional

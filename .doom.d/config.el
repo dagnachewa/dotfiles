@@ -681,7 +681,21 @@
 (after! org (setq org-ditaa-jar-path "~/.emacs.d/.local/straight/repos/org-mode/contrib/scripts/ditaa.jar"))
 
 ;; Org-mind-map
-(load "~/.emacs.d/site-lisp/org-mind-map.el")
+(use-package org-mind-map
+  :init
+  (require 'ox-org)
+  :ensure t
+  ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;:ensure-system-package (gvgen . graphviz)
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
 
 (use-package gnuplot
   :defer
@@ -714,6 +728,43 @@
 (require 'ox-reveal)
 (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
 (setq org-reveal-title-slide nil)
+
+;; ROAM
+
+(setq org-roam-tag-sources '(prop last-directory))
+(setq org-roam-db-location "/data/www/org.git/roam.db")
+(setq org-roam-directory "/data/www/org.git/roam/")
+(setq org-roam-buffer-position 'right)
+(setq org-roam-completion-everywhere t)
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "daily" plain (function org-roam-capture--get-point) ""
+         :immediate-finish t
+         :file-name "journal/%<%Y-%m-%d-%a>"
+         :head "#+TITLE: %<%Y-%m-%d %a>\n#+STARTUP: content\n\n")))
+
+(setq org-roam-capture-templates
+      '(("l" "literature" plain (function org-roam-capture--get-point)
+         :file-name "literature/%<%Y%m%d%H%M>-${slug}"
+         :head "#+title: ${title}\n#+author: %(concat user-full-name)\n#+email: %(concat user-mail-address)\n#+created: %(format-time-string \"[%Y-%m-%d %H:%M]\")\n#+roam_tags: %^{roam_tags}\n\nsource: \n\n%?"
+         :unnarrowed t)
+        ("f" "fleeting" plain (function org-roam-capture--get-point)
+         :file-name "fleeting/%<%Y%m%d%H%M>-${slug}"
+         :head "#+title: ${title}\n#+author: %(concat user-full-name)\n#+email: %(concat user-mail-address)\n#+created: %(format-time-string \"[%Y-%m-%d %H:%M]\")\n\n%?"
+         :unnarrowed t)
+        ("p" "permanent in nested folder" plain (function org-roam-capture--get-point)
+         :file-name "%(read-string \"string: \")/%<%Y%m%d%H%M>-${slug}"
+         :head "#+title: ${title}\n#+author: %(concat user-full-name)\n#+email: %(concat user-mail-address)\n#+created: %(format-time-string \"[%Y-%m-%d %H:%M]\")\n#+roam_tags: %(read-string \"tags: \")\n\n"
+         :unnarrowed t
+         "%?")))
+
+(push '("x" "Projects" plain (function org-roam-capture--get-point)
+        :file-name "gtd/projects/%<%Y%m%d%H%M>-${slug}"
+        :head "#+title: ${title}\n#+roam_tags: %^{tags}\n\n%?"
+        :unnarrowed t) org-roam-capture-templates)
+
+
+
 
 ;; Sql
 (setq sql-connection-alist

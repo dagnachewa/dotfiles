@@ -133,6 +133,13 @@
 (require 'org-habit)
 (require 'org-id)
 (require 'org-checklist)
+
+;; Reveal
+
+(require 'ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+(setq org-reveal-title-slide nil)
+
 (after! org (setq org-archive-location "/data/www/org.git/gtd/archives.org::* %s"
                   ;org-image-actual-width (truncate (* (display-pixel-width) 0.15))
                   org-link-file-path-type 'relative
@@ -308,7 +315,7 @@
 (push '("someday") org-tag-alist)
 (push '("remember") org-tag-alist)
 
-;; Export Settings
+;; Export Settings
 
 (after! org (setq org-html-head-include-scripts t
                   org-export-with-toc t
@@ -638,47 +645,22 @@
 ;; EAF
 
 (use-package eaf
-  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-  :if eaf-env-p
+  :load-path "~/.emacs.d/site-lisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
   :custom
-  (eaf-find-alternate-file-in-dired t)
-  (browse-url-browser-function 'eaf-open-browser) ;; Make EAF Browser my default browser
   (eaf-browser-continue-where-left-off t)
   :config
-  (require 'eaf-org)
-  (defalias 'browse-web #'eaf-open-browser)
-  (eaf-setq eaf-browser-default-zoom "1.25")
-  (eaf-setq eaf-browser-dark-mode "false")
   (eaf-setq eaf-browser-enable-adblocker "true")
-  (eaf-setq eaf-pdf-dark-mode "false")
-  (eaf-setq eaf-browser-enable-autofill "true")
-  ;; I already bind "RET", "<mouse-2>", "^" to `dired-find-alternate-file' in `init-dired.el'.
-  ;; Comment this line out of you don't want to use EAF to open available files in dired.
-  ;; (global-set-key [remap dired-find-alternate-file] #'eaf-file-open-in-dired)
-  (eaf-bind-key nil "M-q" eaf-browser-keybinding)
-  (eaf-bind-key open_link "C-M-s" eaf-browser-keybinding)
-  (eaf-bind-key clear_cookies "C-M-q" eaf-browser-keybinding)
-  (eaf-bind-key insert_or_recover_prev_close_page "X" eaf-browser-keybinding)
-  (eaf-bind-key scroll_up "RET" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down_page "DEL" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down_page "u" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_up_page "d" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_to_end "M->" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_to_begin "M-<" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key quit-window "q" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key zoom_in "C-=" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key zoom_out "C--" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
   (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  (eaf-bind-key eaf-send-key-sequence "M-]" eaf-terminal-keybinding)
-  )
-
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
 ;; Graphs and Chart Modules
 
 ;; Eventually I would like to have org-mind-map generating charts like Sacha’s evil-plans.
 
-(after! org (setq org-ditaa-jar-path "~/.emacs.d/.local/straight/repos/org-mode/contrib/scripts/ditaa.jar"))
+(after! org (setq org-ditaa-jar-path "~/.doom.d/site-lisp/ditaa.jar"))
 
 ;; Org-mind-map
 (use-package org-mind-map
@@ -710,7 +692,7 @@
         ob-mermaid-cli-path "/node-modules/.bin/mmdc"))
 
 ;; PLANTUML
-(setq org-plantuml-jar-path (expand-file-name "/home/perrierjouet/plantuml.jar"))
+(setq org-plantuml-jar-path (expand-file-name "~/.doom.d/site-lisp/plantuml.jar"))
 
 ;; Journal
 
@@ -725,9 +707,9 @@
 
 ;; Reveal
 
-(require 'ox-reveal)
-(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-(setq org-reveal-title-slide nil)
+;;(require 'ox-reveal)
+;;(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+;;(setq org-reveal-title-slide nil)
 
 ;; ROAM
 
@@ -820,3 +802,4 @@
             (interactive)
             (ispell-change-dictionary "en_US")
             (flyspell-buffer)))
+

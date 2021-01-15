@@ -61,3 +61,4 @@
 (package! org-brain)
 (package! org-sidebar)
 (package! org-bullets)
+(package! org-reveal)

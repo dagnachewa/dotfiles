@@ -472,6 +472,13 @@
   :after org-roam
   :hook (org-roam-mode . org-roam-bibtex-mode))
 
+;; Org-ref
+(setq org-ref-bibliography-notes "/data/www/org.git/references/ref.org"
+      org-ref-default-bibliography '("/data/www/org.git/references/library.bib")
+      org-ref-pdf-directory "/mnt/goyaves-home-livres/"
+      org-ref-completion-library 'org-ref-ivy-cite
+      )
+
 ;; Anki Editor
 (use-package anki-editor
   :after org-noter

@@ -125,6 +125,16 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; Benchmark
+;;(require 'benchmark-init)
+;; To disable collection of benchmark data after init is done.
+;;(add-hook 'after-init-hook 'benchmark-init/deactivate)
+
+;; Banner
+;;(setq fancy-splash-image "~/.doom.d/banners/logo.png")
+;;(load "~/.doom.d/banners/black-hole-banner.el")
+
+;; Directory setting
 (setq diary-file "/data/www/org.git/diary.org")
 (setq org-directory "/data/www/org.git/")
 (setq projectile-project-search-path "/data/www/")
@@ -457,6 +467,11 @@
 
 
 
+;; Bibtex
+(use-package org-roam-bibtex
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode))
+
 ;; Anki Editor
 (use-package anki-editor
   :after org-noter
@@ -663,21 +678,7 @@
 (after! org (setq org-ditaa-jar-path "~/.doom.d/site-lisp/ditaa.jar"))
 
 ;; Org-mind-map
-(use-package org-mind-map
-  :init
-  (require 'ox-org)
-  :ensure t
-  ;; Uncomment the below if 'ensure-system-packages` is installed
-  ;;:ensure-system-package (gvgen . graphviz)
-  :config
-  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-  )
+(load "~/.doom.d/site-lisp/org-mind-map.el")
 
 (use-package gnuplot
   :defer

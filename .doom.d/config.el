@@ -231,7 +231,8 @@
 
 ;; Capture Templates
 
-(setq org-capture-templates '(("c" " checklist")
+(setq org-capture-templates '(("a" " articles")
+	                      ("c" " checklist")
                               ("g" " gtd")
                               ("b" " bullet journal")
                               ("n" " notes")
@@ -243,20 +244,20 @@
 (push '("pn" " note" entry (function nm/find-project-note) "* " :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
 (push '("pf" " timeframe" entry (function nm/find-project-timeframe) "* %^{timeframe entry} [%<%Y-%m-%d %a %H:%M>]\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?" :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
 
-(push '("cs" " simple checklist" checkitem (file+olp "~/projects/orgmode/gtd/tasks.org" "Checklists") "- [ ] %?") org-capture-templates)
-(push '("cd" " checklist [date]" checkitem (file+function "~/projects/orgmode/gtd/tasks.org" nm/org-capture-to-task-file) "- [ ] %?") org-capture-templates)
+(push '("cs" " simple checklist" checkitem (file+olp "/www/Dropbox/Org/gtd/tasks.org" "Checklists") "- [ ] %?") org-capture-templates)
+(push '("cd" " checklist [date]" checkitem (file+function "/www/Dropbox/Org/gtd/tasks.org" nm/org-capture-to-task-file) "- [ ] %?") org-capture-templates)
 
-(push '("gs" " simple task" entry (file+olp "~/projects/orgmode/gtd/tasks.org" "Inbox") "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n") org-capture-templates)
-(push '("gk" " task [kill-ring]" entry (file+olp "~/projects/orgmode/gtd/tasks.org" "Inbox") "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n%c") org-capture-templates)
-(push '("gg" " task with goal" entry (file+olp "~/projects/orgmode/gtd/tasks.org" "Inbox") "* REFILE %^{task}%^{GOAL}p %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n") org-capture-templates)
+(push '("gs" " simple task" entry (file+olp "/www/Dropbox/Org/gtd/tasks.org" "Inbox") "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n") org-capture-templates)
+(push '("gk" " task [kill-ring]" entry (file+olp "/www/Dropbox/Org/gtd/tasks.org" "Inbox") "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n%c") org-capture-templates)
+(push '("gg" " task with goal" entry (file+olp "/www/Dropbox/Org/gtd/tasks.org" "Inbox") "* REFILE %^{task}%^{GOAL}p %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n") org-capture-templates)
 
-(push '("bt" " bullet task" entry (file+function "~/projects/orgmode/gtd/bullet.org" nm/capture-bullet-journal) "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n" :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
+(push '("bt" " bullet task" entry (file+function "/www/Dropbox/Org/gtd/bullet.org" nm/capture-bullet-journal) "* REFILE %^{task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n" :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
 
 (push '("nj" " journal" entry (function nm/capture-to-journal) "* %^{entry}\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?") org-capture-templates)
 (push '("na" " append" plain (function nm/org-capture-log) " *Note added:* [%<%Y-%m-%d %a %H:%M>]\n%?" :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
 (push '("nn" " new note" plain (function nm/create-notes-file) "%?" :unnarrowed t :empty-lines-before 1 :empty-lines-after 1) org-capture-templates)
 
-(push '("rr" " research literature" entry (file+function "~/projects/orgmode/gtd/websources.org" nm/enter-headline-websources) "* READ %(get-page-title (current-kill 0))") org-capture-templates)
+(push '("rr" " research literature" entry (file+function "/www/Dropbox/Org/gtd/websources.org" nm/enter-headline-websources) "* READ %(get-page-title (current-kill 0))") org-capture-templates)
 (push '("rf" " rss feed" entry (file+function "~/projects/orgmode/elfeed.org" nm/return-headline-in-file) "* %^{link}") org-capture-templates)
 
 ;; This function is used in conjuction with the capture template "new note" which will find or generate a note based off the folder and filename.
@@ -266,30 +267,30 @@
 
 (defun nm/find-project-task ()
   "Function for creating a project file under org-capture-templates."
-  (nm/find-file-or-create t "~/projects/orgmode/gtd/projects" "project" "Tasks"))
+  (nm/find-file-or-create t "/www/Dropbox/Org/gtd/projects" "project" "Tasks"))
 
 (defun nm/find-project-timeframe ()
   "Function for creating a project file under org-capture-templates."
-  (nm/find-file-or-create t "~/projects/orgmode/gtd/projects" "project" "Timeframe"))
+  (nm/find-file-or-create t "/www/Dropbox/Org/gtd/projects" "project" "Timeframe"))
 
 (defun nm/find-project-requirement ()
   "Function for creating a project file under org-capture-templates."
-  (nm/find-file-or-create t "~/projects/orgmode/gtd/projects" "project" "Requirements"))
+  (nm/find-file-or-create t "/www/Dropbox/Org/gtd/projects" "project" "Requirements"))
 
 (defun nm/find-project-note ()
   "Function for creating a project file under org-capture-templates."
-  (nm/find-file-or-create t "~/projects/orgmode/gtd/projects" "project" "Notes"))
+  (nm/find-file-or-create t "/www/Dropbox/Org/gtd/projects" "project" "Notes"))
 
 (defun nm/return-headline-in-file ()
   "Returns the headline position."
-  (let* ((org-agenda-files "~/projects/orgmode/elfeed.org")
+  (let* ((org-agenda-files "/www/Dropbox/Org/elfeed.org")
          (location (nth 3 (org-refile-get-location nil nil 'confirm))))
     (goto-char location)
     (org-end-of-line)))
 
 (defun nm/enter-headline-websources ()
   "This is a simple function for the purposes when using org-capture to add my entries to a custom Headline, and if URL is not in clipboard it'll return an error and cancel the capture process."
-  (let* ((file "~/projects/orgmode/gtd/websources.org")
+  (let* ((file "/www/Dropbox/Org/gtd/websources.org")
          (headline (read-string "Headline? ")))
     (progn
       (nm/check-headline-exist file headline)
@@ -467,15 +468,50 @@
 
 
 
-;; Bibtex
-(use-package org-roam-bibtex
-  :after org-roam
-  :hook (org-roam-mode . org-roam-bibtex-mode))
+;; Org-Roam-Bibtex
+(use-package! org-roam-bibtex
+  :load-path "/www/Dropbox/Org/references/library.bib" ;Modify with your own path
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :bind (:map org-mode-map
+         (("C-c n a" . orb-note-actions))))
+(setq orb-templates
+      '(("r" "ref" plain (function org-roam-capture--get-point) ""
+         :file-name "${citekey}"
+         :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n" ; <--
+         :unnarrowed t)))
+(setq orb-preformat-keywords   '(("citekey" . "=key=") "title" "url" "file" "author-or-editor" "keywords"))
+
+(setq orb-templates
+      '(("n" "ref+noter" plain (function org-roam-capture--get-point)
+         ""
+         :file-name "${slug}"
+         :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS:
+
+- tags ::
+- keywords :: ${keywords}
+\* ${title}
+:PROPERTIES:
+:Custom_ID: ${citekey}
+:URL: ${url}
+:AUTHOR: ${author-or-editor}
+:NOTER_DOCUMENT: %(orb-process-file-field \"${citekey}\")
+:NOTER_PAGE:
+:END:")))
+
+(setq
+      bibtex-completion-pdf-field "file"
+      bibtex-completion-bibliography
+      '("/www/Dropbox/Org/references/library.bib")
+      bibtex-completion-library-path '("/www/Dropbox/Zotero/")
+     ; bibtex-completion-notes-path "~/Dropbox/Org/references/articles.org"  ;; not needed anymore as I take notes in org-roam
+      )
+      
 
 ;; Org-ref
-(setq org-ref-bibliography-notes "/www/Dropbox/bibliography/notes.org"
-      org-ref-default-bibliography '("/www/Dropbox/bibliography/references.bib")
-      org-ref-pdf-directory "/mnt/goyaves-home-livres/"
+(setq org-ref-notes-directory "/www/Dropbox/references/"
+      ;org-ref-bibliography-notes "/www/Dropbox/bibliography/notes.org"
+      org-ref-default-bibliography '("/www/Dropbox/references/library.bib")
+      org-ref-pdf-directory "/www/Dropbox/Zotero/"
       org-ref-completion-library 'org-ref-ivy-cite
       )
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
@@ -492,6 +528,51 @@
 (eval-after-load "zotxt"
 '(setq zotxt-default-bibliography-style "mkbehr-short"))
 
+;; Ox-Pandoc
+
+;; This is a great package that I use to output org files to different formats.
+
+(use-package! ox-pandoc
+  :after org)
+;; default options for all output formats
+(setq org-pandoc-options '((standalone . _)))
+;; cancel above settings only for 'docx' format
+(setq org-pandoc-options-for-docx '((standalone . nil)))
+;; special settings for beamer-pdf and latex-pdf exporters
+(setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
+(setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex")))
+;; special extensions for markdown_github output
+(setq org-pandoc-format-extensions '(markdown_github+pipe_tables+raw_html))
+
+;; Ox-Hugo
+(defun org-hugo-new-subtree-post-capture-template ()
+  "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+  (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
+  	 ;; https://www.yedfash.com/
+         (date (format-time-string (org-time-stamp-format  :inactive) (org-current-time)))
+         (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+         (fname (org-hugo-slug title)))
+    (mapconcat #'identity
+               `(
+                 ,(concat "* TODO " title)
+                 ":PROPERTIES:"
+                 ,(concat ":EXPORT_FILE_NAME: " fname)
+                 ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
+                 ,(concat ":EXPORT_HUGO_CUSTOM_FRONT_MATTER: "  ":tags something :subtitle booyea :featured false :categories abc :highlight true ")
+                 ":END:"
+                 "%?\n")          ;Place the cursor here
+               "\n")))
+(defvar hugo-org-path "/www/Dropbox/blog/yedfash-website/org-content/"
+  "define the place where we put our org files for hugo")
+;;(defvar org-capture-blog (concat hugo-org-path "blog.org"))
+
+(setq org-capture-templates
+      '(
+        ("h" "Hugo Post"
+         entry
+         (file+olp "/www/Dropbox/blog/yedfash-website/org-content/blog.org" "Posts")
+         (function  org-hugo-new-subtree-post-capture-template))))
 
 ;; Anki Editor
 (use-package anki-editor
@@ -718,7 +799,7 @@
 
 ;; Journal
 
-(after! org (setq org-journal-dir "~/projects/orgmode/gtd/journal/"
+(after! org (setq org-journal-dir "/www/Dropbox/Org/Daily/"
                   org-journal-enable-agenda-integration t
                   org-journal-file-type 'monthly
                   org-journal-carryover-items "TODO=\"TODO\"|TODO=\"NEXT\"|TODO=\"PROJ\"|TODO=\"STRT\"|TODO=\"WAIT\"|TODO=\"HOLD\""))
@@ -737,7 +818,28 @@
 
 (setq org-roam-tag-sources '(prop last-directory))
 (setq org-roam-db-location "/www/Dropbox/Org/roam.db")
-(setq org-roam-directory "/www/Dropbox/Org/roam/")
+(setq org-roam-directory "/www/Dropbox/Org/references/notes")
+
+(after! org-roam
+        (map! :leader
+            :prefix "n"
+            :desc "org-roam" "l" #'org-roam
+            :desc "org-roam-insert" "i" #'org-roam-insert
+            :desc "org-roam-switch-to-buffer" "b" #'org-roam-switch-to-buffer
+            :desc "org-roam-find-file" "f" #'org-roam-find-file
+            :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+            :desc "org-roam-insert" "i" #'org-roam-insert
+            :desc "org-roam-capture" "c" #'org-roam-capture))
+(after! org-roam
+      (setq org-roam-ref-capture-templates
+            '(("r" "ref" plain (function org-roam-capture--get-point)
+               "%?"
+               :file-name "websites/${slug}"
+               :head "#+TITLE: ${title}
+    #+ROAM_KEY: ${ref}
+    - source :: ${ref}"
+               :unnarrowed t))))  ; capture template to grab websites. Requires org-roam protocol.
+
 (setq org-roam-buffer-position 'right)
 (setq org-roam-completion-everywhere t)
 

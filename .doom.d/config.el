@@ -101,7 +101,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "/data/www/org.git/")
+(setq org-directory "/www/Dropbox/Org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -135,8 +135,8 @@
 ;;(load "~/.doom.d/banners/black-hole-banner.el")
 
 ;; Directory setting
-(setq diary-file "/data/www/org.git/diary.org")
-(setq org-directory "/data/www/org.git/")
+(setq diary-file "/www/Dropbox/Org/diary.org")
+(setq org-directory "/www/Dropbox/Org/")
 (setq projectile-project-search-path "/data/www/")
 
 ;; Org-Mode
@@ -150,7 +150,7 @@
 (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
 (setq org-reveal-title-slide nil)
 
-(after! org (setq org-archive-location "/data/www/org.git/gtd/archives.org::* %s"
+(after! org (setq org-archive-location "/www/Dropbox/Org/gtd/archives.org::* %s"
                   ;org-image-actual-width (truncate (* (display-pixel-width) 0.15))
                   org-link-file-path-type 'relative
                   org-log-state-notes-insert-after-drawers t
@@ -180,7 +180,7 @@
 (push '("o" "overview"
         ((agenda ""
                  ((org-agenda-span '1)
-                  (org-agenda-files '(list "/data/www/org.git/"))
+                  (org-agenda-files '(list "/www/Dropbox/Org/"))
                   (org-agenda-start-day (org-today))))
          (tags-todo "-SOMEDAY-@delegated/+NEXT"
                     ((org-agenda-overriding-header "Next Tasks")
@@ -207,17 +207,17 @@
 (push '("b" "bullet"
         ((agenda ""
                  ((org-agenda-span '2)
-                  (org-agenda-files (append (file-expand-wildcards "/data/www/org.git/bullet/*.org")))
+                  (org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/bullet/*.org")))
                   (org-agenda-start-day (org-today))))
          (tags-todo "-someday/"
                     ((org-agenda-overriding-header "Task Items")
-                     (org-agenda-files (append (file-expand-wildcards "/data/www/org.git/bullet/*.org")))
+                     (org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/bullet/*.org")))
                      (org-agenda-todo-ignore-scheduled t)
                      (org-agenda-todo-ignore-deadlines t)
                      (org-agenda-todo-ignore-with-date t)))
          (tags "note"
                ((org-agenda-overriding-header "Notes")
-                (org-agenda-files (append (file-expand-wildcards "/data/www/org.git/bullet/*.org"))))))) org-agenda-custom-commands)
+                (org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/bullet/*.org"))))))) org-agenda-custom-commands)
 
 (push '("g" "goals"
         ((tags-todo "Goal=\"prof-python\"/")
@@ -386,7 +386,7 @@
 
 ;; Loading agenda settings
 
-(after! org (setq org-agenda-diary-file "/data/www/org.git/diary.org"
+(after! org (setq org-agenda-diary-file "/www/Dropbox/Org/diary.org"
                   org-agenda-dim-blocked-tasks t ; grays out task items that are blocked by another task (EG: Projects with subtasks)
                   org-agenda-use-time-grid nil
                   org-agenda-tags-column 0
@@ -400,7 +400,7 @@
                   org-enforce-todo-dependencies t
                   org-habit-show-habits t))
 
-(after! org (setq org-agenda-files (append (file-expand-wildcards "/data/www/org.git/gtd/*.org") (file-expand-wildcards "/data/www/org.git/gtd/*/*.org"))))
+(after! org (setq org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/gtd/*.org") (file-expand-wildcards "/www/Dropbox/Org/gtd/*/*.org"))))
 
 ;; Logging and Drawers
 
@@ -431,20 +431,20 @@
 
 (after! org (setq org-publish-project-alist
                   '(("attachments"
-                     :base-directory "/data/www/org.git/"
+                     :base-directory "/www/Dropbox/Org/"
                      :recursive t
                      :base-extension "jpg\\|jpeg\\|png\\|pdf\\|css"
                      :publishing-directory "~/publish_html"
                      :publishing-function org-publish-attachment)
                     ("Markdown-to-Orgmode"
-                     :base-directory "/data/www/org.git/notes/"
-                     :publishing-directory "/data/www/org.git/www/"
+                     :base-directory "/www/Dropbox/Org/notes/"
+                     :publishing-directory "/www/Dropbox/Org/www/"
                      :base-extension "md"
                      :recursive t
                      :publishing-function org-md-publish-to-org)
                     ("notes"
-                     :base-directory "/data/www/org.git/notes/"
-                     :publishing-directory "/data/www/org.git/www/"
+                     :base-directory "/www/Dropbox/Org/notes/"
+                     :publishing-directory "/www/Dropbox/Org/www/"
                      :section-numbers nil
                      :base-extension "org"
                      :with-properties nil
@@ -473,11 +473,25 @@
   :hook (org-roam-mode . org-roam-bibtex-mode))
 
 ;; Org-ref
-(setq org-ref-bibliography-notes "/data/www/org.git/references/ref.org"
-      org-ref-default-bibliography '("/data/www/org.git/references/library.bib")
+(setq org-ref-bibliography-notes "/www/Dropbox/bibliography/notes.org"
+      org-ref-default-bibliography '("/www/Dropbox/bibliography/references.bib")
       org-ref-pdf-directory "/mnt/goyaves-home-livres/"
       org-ref-completion-library 'org-ref-ivy-cite
       )
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+;; Org-zotxt
+;; Activate org-zotxt-mode in org-mode buffers
+(add-hook 'org-mode-hook (lambda () (org-zotxt-mode 1)))
+;; Bind something to replace the awkward C-u C-c " i
+(define-key org-mode-map
+  (kbd "C-c \" \"") (lambda () (interactive)
+                      (org-zotxt-insert-reference-link '(4))))
+;; Change citation format to be less cumbersome in files.
+;; You'll need to install mkbehr-short into your style manager first.
+(eval-after-load "zotxt"
+'(setq zotxt-default-bibliography-style "mkbehr-short"))
+
 
 ;; Anki Editor
 (use-package anki-editor
@@ -502,7 +516,7 @@
   :bind (("<f8>" . deft))
   :commands (deft deft-open-file deft-new-file-named)
   :config
-  (setq deft-directory "~/projects/orgmode/"
+  (setq deft-directory "/www/Dropbox/Org/"
         deft-auto-save-interval 0
         deft-recursive t
         deft-current-sort-method 'title
@@ -555,12 +569,12 @@
   :bind
   ("C-M-b" . (lambda ()
                (interactive)
-               (find-file "~/Dropbox/beancount/main.bean")))
+               (find-file "/www/Dropbox/beancount/main.bean")))
   :mode
   ("\\.bean\\(?:count\\)?\\'" . beancount-mode)
   :config
   (setq beancount-accounts-files
-        (directory-files "~/Dropbox/beancount/accounts/"
+        (directory-files "/www/Dropbox/beancount/accounts/"
                          'full
                          (rx ".bean" eos))))
 
@@ -570,7 +584,7 @@
 (use-package elfeed-org
   :defer
   :config
-  (setq rmh-elfeed-org-files (list "/data/www/org.git/elfeed.org")))
+  (setq rmh-elfeed-org-files (list "/www/Dropbox/Org/elfeed.org")))
 (use-package elfeed
   :defer
   :config
@@ -722,8 +736,8 @@
 ;; ROAM
 
 (setq org-roam-tag-sources '(prop last-directory))
-(setq org-roam-db-location "/data/www/org.git/roam.db")
-(setq org-roam-directory "/data/www/org.git/roam/")
+(setq org-roam-db-location "/www/Dropbox/Org/roam.db")
+(setq org-roam-directory "/www/Dropbox/Org/roam/")
 (setq org-roam-buffer-position 'right)
 (setq org-roam-completion-everywhere t)
 

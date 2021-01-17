@@ -13,3 +13,6 @@
 [submodule "prezto"]
 	path = prezto
 	url = https://github.com/dagnachewa/prezto
+[submodule "xst"]
+	path = xst
+	url = https://github.com/dagnachewa/xst

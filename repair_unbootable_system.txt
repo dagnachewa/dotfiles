@@ -1,0 +1,31 @@
+#1) modprobe dm-mod
+#   modprobe xfs
+#   modprobe ext3
+
+#2) umount         /* umount all important data ex: /data /downloads etc */
+
+#3) mount root on /mnt  /* ex: sudo vgscan 
+#                              mount -t xfs /dev/mapper/DEVICE /mnt  */
+      
+
+#4) mount /dev/sda1 /mnt/boot
+
+#5) mount -t proc proc /mnt/proc
+
+#6) mount -t sysfs sysfs /mnt/sys
+
+#7) mount --bind /dev /mnt/dev
+
+#8) chroot /mnt /bin/bash
+
+#9) dhcpcd eth0  /* If no internet */ 
+
+#10) pacman -Syu 
+
+#11) pacman -S linux
+
+#12) pacman -S grub
+
+#13) sudo grub-install --recheck /dev/sdX  ex: /dev/sda
+
+#14) reboot

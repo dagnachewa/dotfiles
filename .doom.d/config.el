@@ -126,7 +126,7 @@
 ;; they are implemented.
 
 ;; Benchmark
-;;(require 'benchmark-init)
+(require 'benchmark-init)
 ;; To disable collection of benchmark data after init is done.
 ;;(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
@@ -217,7 +217,8 @@
                      (org-agenda-todo-ignore-with-date t)))
          (tags "note"
                ((org-agenda-overriding-header "Notes")
-                (org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/bullet/*.org"))))))) org-agenda-custom-commands)
+                (org-agenda-files (append (file-expand-wildcards "/www/Dropbox/Org/bullet/*.org")
+                                          )))))) org-agenda-custom-commands)
 
 (push '("g" "goals"
         ((tags-todo "Goal=\"prof-python\"/")
@@ -289,7 +290,8 @@
     (org-end-of-line)))
 
 (defun nm/enter-headline-websources ()
-  "This is a simple function for the purposes when using org-capture to add my entries to a custom Headline, and if URL is not in clipboard it'll return an error and cancel the capture process."
+  "This is a simple function for the purposes when using org-capture to add my entries to a custom Headline,
+   and if URL is not in clipboard it'll return an error and cancel the capture process."
   (let* ((file "/www/Dropbox/Org/gtd/websources.org")
          (headline (read-string "Headline? ")))
     (progn
@@ -397,7 +399,8 @@
                   org-agenda-skip-scheduled-if-done t
                   org-agenda-skip-deadline-if-done t
                   org-agenda-window-setup 'current-window
-                  org-enforce-todo-checkbox-dependencies nil ; This has funny behavior, when t and you try changing a value on the parent task, it can lead to Emacs freezing up. TODO See if we can fix the freezing behavior when making changes in org-agenda-mode.
+                  org-enforce-todo-checkbox-dependencies nil ; This has funny behavior, when t and you try changing a value on the parent task,
+                                                             ; it can lead to Emacs freezing up. TODO See if we can fix the freezing behavior when making changes in org-agenda-mode.
                   org-enforce-todo-dependencies t
                   org-habit-show-habits t))
 
@@ -575,7 +578,7 @@ See `org-capture-templates' for more information."
          (function  org-hugo-new-subtree-post-capture-template))))
 
 ;; Anki Editor
-(use-package anki-editor
+(use-package! anki-editor
   :after org-noter
   :config
   ; I like making decks
@@ -593,7 +596,7 @@ See `org-capture-templates' for more information."
   (add-hook 'projectile-after-switch-project-hook 'zyro/deft-update-directory)
   (add-hook 'projectile-after-switch-project-hook 'deft-refresh))
 
-(use-package deft
+(use-package! deft
   :bind (("<f8>" . deft))
   :commands (deft deft-open-file deft-new-file-named)
   :config
@@ -662,11 +665,11 @@ See `org-capture-templates' for more information."
 
 ;; Elfeed
 
-(use-package elfeed-org
+(use-package! elfeed-org
   :defer
   :config
   (setq rmh-elfeed-org-files (list "/www/Dropbox/Org/elfeed.org")))
-(use-package elfeed
+(use-package! elfeed
   :defer
   :config
   (setq elfeed-db-directory "~/.elfeed/"))
@@ -739,7 +742,7 @@ See `org-capture-templates' for more information."
            (after-init . mu4e-alert-enable-notifications))
     :config (mu4e-alert-set-default-style 'libnotify))
 
-  (use-package smtpmail)
+  (use-package! smtpmail)
 
   (setq
    send-mail-function 'smtpmail-send-it
@@ -761,7 +764,7 @@ See `org-capture-templates' for more information."
 
 ;; EAF
 
-(use-package eaf
+(use-package! eaf
   :load-path "~/.emacs.d/site-lisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
   :custom
   (eaf-browser-continue-where-left-off t)
@@ -782,13 +785,13 @@ See `org-capture-templates' for more information."
 ;; Org-mind-map
 (load "~/.doom.d/site-lisp/org-mind-map.el")
 
-(use-package gnuplot
+(use-package! gnuplot
   :defer
   :config
   (setq gnuplot-program "gnuplot"))
 
 ;; MERMAID
-(use-package mermaid-mode
+(use-package! mermaid-mode
   :defer
   :config
   (setq mermaid-mmdc-location "/node_modules/.bin/mmdc"
@@ -869,6 +872,9 @@ See `org-capture-templates' for more information."
         :head "#+title: ${title}\n#+roam_tags: %^{tags}\n\n%?"
         :unnarrowed t) org-roam-capture-templates)
 
+; load org helper functions        
+(load! "org-helpers.el")
+
 
 
 
@@ -926,4 +932,5 @@ See `org-capture-templates' for more information."
             (interactive)
             (ispell-change-dictionary "en_US")
             (flyspell-buffer)))
+
 

@@ -16,3 +16,6 @@
 [submodule "xst"]
 	path = xst
 	url = https://github.com/dagnachewa/xst
+[submodule ".config/doom"]
+	path = .config/doom
+	url = https://github.com/dagnachewa/emacs-config

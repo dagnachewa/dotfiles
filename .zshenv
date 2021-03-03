@@ -11,6 +11,7 @@ path=(/usr/local/bin
   /usr/bin
   ~/.local/bin
   ~/.cargo/bin
+  /usr/bin/core_perl/
   /opt/openresty/bin
   /opt/intel/compilers_and_libraries_2019.5.281/linux/bin
   /opt/apache-drill/bin

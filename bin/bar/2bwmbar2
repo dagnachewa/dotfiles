@@ -56,8 +56,8 @@ sep_right=""                       # Powerline separator right
 sep_l_left=""                      # Powerline light separator left
 sep_l_right=""                     # Powerline light sepatator right
 rightArrow="%{F$fg}\ue0b0%{F-}"
-leftArrow="%{F$fg}  %{F-}"
-SEP_LEFT="%{F$fg2}%{F-}"
+leftArrow="%%{F$nwht}%{F-}"
+SEP_LEFT="%{B$fg2}%{F$bg2}  %{F-}%{B-}"
 
 ## glyphs
 glymem=""
@@ -144,6 +144,10 @@ MUSIC() {
     echo -n "${song}"
 }
 
+Music(){
+     echo -n $(playerctl metadata title) "-" $(playerctl metadata album) "by" $(playerctl metadata artist)
+}
+
 VOL() {
 	getvol=$(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1  )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')
 	
@@ -218,13 +222,13 @@ DATE() {
 }
 
 CLOCK() {
-    echo -n "%{F$fg}%{B#f98560} $(date "+%H:%M") %{F-}%{B-}"
+    echo -n "%{F$fg}%{B#f98560}   $(date "+%H:%M") %{F-}%{B-}"
 }
 
 BAR() {
     #ADD ALL THE THINGS
     while true; do
-      buf=" $(WRK)$(WINDOWTITLE) %{c} $(MUSIC2)  %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
+      buf=" $(WRK)$(WINDOWTITLE) %{c} $(Music)  %{r}$(ROOT)$SEP1$(WWW)$SEP1$(DATA)$SEP1$(NET)$SEP1$(MEMORY)$SEP1$(CPU)$SEP1$(DATE)$SEP1$(CLOCK)" 
 		echo "$buf"	
         sleep 0.1
     done | lemonbar -f "Font Awesome:regular:bold:size=11" \

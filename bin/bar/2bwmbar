@@ -13,9 +13,9 @@
 pkill lemonbar
 
 #COLORS
-fg="#24002c"
-bg="#24002c"
-fg2="#f98560"
+fg="#e0e0e0"
+bg="#1F2229"
+fg2="#FF8A18"
 bg2="#24002c"
 
 hint="#eff1f5"
@@ -102,11 +102,11 @@ fi
 WRK(){ # Current Workspace .. 
   ws=`xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'`
 	case ${ws} in
-		0)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
-		1)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
-		2)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
-		3)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
-		*)echo -n "%{B$bg2}%{F$fg2}   %{F-}%{B-}";;
+		0)echo -n "%{B$bg}%{F$fg2}   %{F-}%{B-}";;
+		1)echo -n "%{B$bg}%{F$fg2}   %{F-}%{B-}";;
+		2)echo -n "%{B$bg}%{F$fg2}   %{F-}%{B-}";;
+		3)echo -n "%{B$bg}%{F$fg2}   %{F-}%{B-}";;
+		*)echo -n "%{B$bg}%{F$fg2}   %{F-}%{B-}";;
 	esac
 }
 
@@ -120,7 +120,7 @@ WIN() {
 CPU(){ # CPUs temp ..
   cpuload=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')])
   cpuload+="%"
-	echo -n "%{B#cb7bda}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
+	echo -n "%{B#FD0439}%{F$fg} $glycpu $cpuload %{F-}%{B-}"
 	
 }
 
@@ -128,11 +128,11 @@ MEMORY(){
   mem=$(free -m | awk 'NR==2 {print $3}')
         mem+="MB"
         #echo "%{F$BMAGENTA}  %{F-}${mem} RAM"
-	echo -n "%{B#fc595e}%{F$fg}  $mem RAM %{F-}%{B-}"
+	echo -n "%{B#FE5B4A}%{F$fg}  $mem RAM %{F-}%{B-}"
 }
 
 
-MUSIC(){ 
+MUSIC2(){ 
 	STATUS="$(mpc status | sed '2q;d' | awk '{ print $1 }')"	
 	#mus=$(basename "$(mpc current)" | sed "s/^\(.*\)\..*$/\1/" | cut -c1-30 )
 
@@ -140,27 +140,43 @@ MUSIC(){
 			#echo -n "%{F$fg}  %{F-} $SEP2$mus"
   		#fi
   	if [[ "$STATUS" == "[playing]" ]]; then
-  		echo " $(mpc current | trunc 45)"
-	fi
+  		echo "$(mpc current | trunc 45)"
+	  fi
 
 }
 
+MUSIC() {
+	playing=$(mpc status | sed -n 2p | cut -c1-9)
+	
+		if [ "${playing}" = "[playing]" ]; then
+        	symbol="%{B$bblk} %{F$fg2}%{F-} %{B-}"
+			song="%{B$bg2} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+		elif [ ${playing} = "[paused]" ]; then
+			symbol="%{B$bg2} %{F$fg2}%{F-} %{B-}"
+			song="%{B$nblk} $(mpc current -f "%artist% - %title%" | cut -c1-$muslength) %{B-}"
+		elif [ ! "${playing}" = "[playing]" ]; then
+			symbol="%{B$bg2} %{F$fg2}%{F-} %{B-}"
+			song="%{B$bg2 ··· %{B-}"
+		fi
+
+    echo -n "${song}"
+}
 
 
 
 ROOT(){
 	hdroot="$(df -h / | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B#abb7c5}%{F$fg}  root  $hdroot free %{F-}%{B-}"
+	echo -n "%{B#9F2383}%{F$fg}  root  $hdroot free %{F-}%{B-}"
 
 }
 DATA(){
 	hdroot="$(df -h /data | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B#f68e83}%{F$fg}  data  $hdroot free %{F-}%{B-}"
+	echo -n "%{B#1098D6}%{F$fg}  data  $hdroot free %{F-}%{B-}"
 
 }
 WWW(){
 	hdwww="$(df -h /www | tail -n 1 | awk '{print $4}')"
-	echo -n "%{B#9e5c99}%{F$fg}  www  $hdwww free %{F-}%{B-}"
+	echo -n "%{B#EC0101}%{F$fg}  www  $hdwww free %{F-}%{B-}"
 
 }
 
@@ -217,17 +233,17 @@ WINDOWTITLE(){
 
 NET() {
 	ping=`ping 8.8.8.8 -c 1 | awk '/rtt/ {printf("%d\n",$4 + 0.5)}'`
-	test -n "${ping}" && echo -n "%{B#678891} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
+	test -n "${ping}" && echo -n "%{B#933082} %{F$fg}  network %{F-}%{B-}" || echo "%{F$bred}   %{F-} No Connection"
           
 	echo 
 }
 
 DATE() {
-    echo -n "%{B#edb9bd} %{F$fg}   $(date "+%a %d.%m")%{F-} %{B-}"
+    echo -n "%{B#FEBB15} %{F$fg}   $(date "+%a %d.%m")%{F-} %{B-}"
 }
 
 CLOCK() {
-    echo -n "%{F$fg}%{B#f98560} $(date "+%H:%M") %{F-}%{B-}"
+    echo -n "%{F$fg}%{B#493B76} $(date "+%H:%M") %{F-}%{B-}"
 }
 
 BAR() {
